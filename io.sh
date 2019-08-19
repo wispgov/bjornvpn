@@ -1009,7 +1009,7 @@ verb 5" >> /etc/openvpn/client-template.md
 	echo "" >> /etc/openvpn/client-template.md
 fi
 	# Generate the custom client.ovpn
-	newClient
+	createConfig
 	echo "If you want to add more clients, you simply need to run this script another time!"
 }
 
@@ -1358,7 +1358,7 @@ function manageMenu () {
 
 	case $MENU_OPTION in
 		1)
-			newClient
+			createConfig
 		;;
 		2)
 			revokeClient
