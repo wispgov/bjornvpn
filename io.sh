@@ -1399,7 +1399,7 @@ if [[ -e /etc/openvpn/server.conf ]]; then
 	manageMenu
 else
 	declare -a arr=("8000" "3128" "1337" "1338" "8080")
-	RANDOM_SQUID=$(shuf -i 0-5 -n1)
+	RANDOM_SQUID=$(shuf -i 0-4 -n1)
 	SQUID="${arr[$RANDOM_SQUID]}"
 	IP=$(curl -4 icanhazip.com)
 	installSquid
