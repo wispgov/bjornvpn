@@ -1345,6 +1345,11 @@ function removeOpenVPN () {
 	fi
 }
 
+function updateInstaller () {
+	curl -O https://raw.githubusercontent.com/sshwispio/bjornvpn/master/io.sh && chmod o+x && ./io.sh
+	exit 0
+}
+
 function manageMenu () {
 	clear
 	echo "Welcome to BjornVPN!"
@@ -1357,7 +1362,8 @@ function manageMenu () {
 	echo "		1) Add a New User"
 	echo "		2) Revoke Existing User"
 	echo "		3) Remove BjornVPN"
-	echo "		4) Exit"
+	echo "		4) Update BjornVPN"
+	echo "		5) Exit"
 	until [[ "$MENU_OPTION" =~ ^[1-4]$ ]]; do
 		read -rp "Select an Option [1-4]: " MENU_OPTION
 	done
@@ -1373,6 +1379,9 @@ function manageMenu () {
 			removeOpenVPN
 		;;
 		4)
+			updateInstaller
+		;;
+		5)
 			exit 0
 		;;
 	esac
