@@ -611,6 +611,7 @@ function installSquid () {
 	http_access allow all
 
 	http_port 8000
+	http_port 8080
 	http_port 3128
 	http_port 1337
 	http_port 1338
@@ -1346,11 +1347,11 @@ function removeOpenVPN () {
 
 function manageMenu () {
 	clear
-	echo "Welcome to BjornVPN OpenVPN!"
+	echo "Welcome to BjornVPN!"
 	echo ""
-	echo "It looks like BjornVPN - OpenVPN is already installed."
+	echo "It looks like BjornVPN is already installed."
 	echo ""
-	echo "Bjorn - OpenVPN Port: 465, Squid Proxy Port 8000/3128/1337/1338, To add a New User do choose Option 1:1 for Passwordless Clients."
+	echo "Bjorn - BjornVPN Port: 465, Squid Proxy Port 8000/8080/3128/1337/1338, To add a New User do choose Option 1:1 for Passwordless Clients."
 	echo ""
 	echo "What do you want to do?"
 	echo "		1) Add a New User"
@@ -1379,7 +1380,7 @@ function manageMenu () {
 
 function setupBanner () {
 	echo "BjornVPN OpenVPN Port: 465
-	BjornVPN Squid Proxy Port: 8000, 3128, 1337, 1338
+	BjornVPN Squid Proxy Port: 8000, 8080, 3128, 1337, 1338
 	BjornVPN Web Panel Access: $IP:8888
 	BjornVPN Made by: Xin Snowflakes
 	Admin Contact Number - (PayMaya and GCash) - for Donation: 09225205353
@@ -1397,8 +1398,8 @@ initialCheck
 if [[ -e /etc/openvpn/server.conf ]]; then
 	manageMenu
 else
-	declare -a arr=("8000" "3128" "1337" "1338")
-	RANDOM_SQUID=$(shuf -i49152-4 -n1)
+	declare -a arr=("8000" "3128" "1337" "1338" "8080")
+	RANDOM_SQUID=$(shuf -i 0-5 -n1)
 	SQUID="${arr[$RANDOM_SQUID]}"
 	IP=$(curl -4 icanhazip.com)
 	installSquid
