@@ -1364,8 +1364,8 @@ function manageMenu () {
 	echo "		3) Remove BjornVPN"
 	echo "		4) Update BjornVPN"
 	echo "		5) Exit"
-	until [[ "$MENU_OPTION" =~ ^[1-4]$ ]]; do
-		read -rp "Select an Option [1-4]: " MENU_OPTION
+	until [[ "$MENU_OPTION" =~ ^[1-5]$ ]]; do
+		read -rp "Select a Menu Option [1-5]: " MENU_OPTION
 	done
 
 	case $MENU_OPTION in
