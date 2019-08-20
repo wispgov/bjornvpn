@@ -270,7 +270,7 @@ function installQuestions () {
 		;;
 	esac
 	echo ""
-	echo "What DNS resolvers do you want to use with the VPN?"
+	echo "What DNS resolvers do you want to use with BjornVPN?"
 	echo "   1) Current system resolvers (from /etc/resolv.conf)"
 	echo "   2) Self-hosted DNS Resolver (Unbound)"
 	echo "   3) Cloudflare (Anycast: worldwide)"
@@ -282,8 +282,9 @@ function installQuestions () {
 	echo "   9) Google (Anycast: worldwide)"
 	echo "   10) Yandex Basic (Russia)"
 	echo "   11) AdGuard DNS (Russia)"
-	until [[ "$DNS" =~ ^[0-9]+$ ]] && [ "$DNS" -ge 1 ] && [ "$DNS" -le 11 ]; do
-		read -rp "DNS [1-10]: " -e -i 3 DNS
+	echo "   12) Philippine DNS (SEA)"
+	until [[ "$DNS" =~ ^[0-9]+$ ]] && [ "$DNS" -ge 1 ] && [ "$DNS" -le 12 ]; do
+		read -rp "DNS [2 - 12]: " -e -i 3 DNS
 			if [[ $DNS == 2 ]] && [[ -e /etc/unbound/unbound.conf ]]; then
 				echo ""
 				echo "Unbound is already installed."
@@ -808,6 +809,10 @@ ifconfig-pool-persist ipp.txt" >> /etc/openvpn/server.conf
 		11) # AdGuard DNS
 			echo 'push "dhcp-option DNS 176.103.130.130"' >> /etc/openvpn/server.conf
 			echo 'push "dhcp-option DNS 176.103.130.131"' >> /etc/openvpn/server.conf
+		;;
+		12) # Custom DNS
+			echo 'push "dhcp-option DNS 23.253.163.53"' >> /etc/openvpn/server.conf
+			echo 'push "dhcp-option DNS 198.101.242.72"' >> /etc/openvpn/server.conf
 		;;
 	esac
 	echo 'push "redirect-gateway def1 bypass-dhcp"' >> /etc/openvpn/server.conf
