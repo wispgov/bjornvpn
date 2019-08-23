@@ -1405,7 +1405,7 @@ function removeOpenVPN () {
 }
 
 function updateInstaller () {
-	curl -O https://raw.githubusercontent.com/sshwispio/bjornvpn/master/io.sh && chmod o+x && ./io.sh
+	curl -O https://raw.githubusercontent.com/sshwispio/bjornvpn/master/io.sh && chmod o+x io.sh && ./io.sh
 	exit 0
 }
 
