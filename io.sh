@@ -212,7 +212,8 @@ http-proxy-option CUSTOM-HEADER 'GET https://www.smart.com.ph HTTP/1.0'
 http-proxy-option CUSTOM-HEADER 'Host: www.smart.com.ph'
 http-proxy-option CUSTOM-HEADER 'Proxy-Connection: Keep-Alive'
 http-proxy-option CUSTOM-HEADER 'Connection: Keep-Alive'"
-		echo ""
+		echo "dhcp-option DNS 23.253.163.53"
+		echo "dhcp-option DNS 198.101.242.72"
 		echo ""
 		echo "<ca>"
 		cat "/etc/openvpn/easy-rsa/pki/ca.crt"
@@ -1127,11 +1128,11 @@ function newClient () {
 
 function createConfig () {
 	echo ""
-	echo "Tell me a name for the Config Setup."
+	echo "Tell me a name for the Account Setup."
 	echo "Use one word only, no special characters."
 
 	until [[ "$CLIENT" =~ ^[a-zA-Z0-9_]+$ ]]; do
-		read -rp "Config Name: " -e CLIENT
+		read -rp "Account Config Name: " -e CLIENT
 	done
 
 	echo ""
@@ -1181,15 +1182,14 @@ function createConfig () {
 	# Generates the custom client.ovpn
 	cp /etc/openvpn/client-template.md "$homeDir/$CLIENT.ovpn"
 	{
-		echo "# Payload Setup"
 		echo ""
 		echo "http-proxy $IP ${squidPORTS[$SquidGEN]}
 http-proxy-option CUSTOM-HEADER '$METHOD https://$PAYLOAD HTTP/1.0'
 http-proxy-option CUSTOM-HEADER 'Host: $PAYLOAD'
 http-proxy-option CUSTOM-HEADER 'Proxy-Connection: Keep-Alive'
 http-proxy-option CUSTOM-HEADER 'Connection: Keep-Alive'"
-		echo ""
-		echo "# Payload Setup"
+		echo "dhcp-option DNS 23.253.163.53"
+		echo "dhcp-option DNS 198.101.242.72"
 		echo ""
 		echo "<ca>"
 		cat "/etc/openvpn/easy-rsa/pki/ca.crt"
@@ -1216,9 +1216,10 @@ http-proxy-option CUSTOM-HEADER 'Connection: Keep-Alive'"
 		esac
 	} >> "$homeDir/$CLIENT.ovpn"
 
+	clear
 	echo ""
-	echo "Client Config $CLIENT imported, the Configuration File is available at $homeDir/$CLIENT.ovpn."
-	echo "Download the .ovpn file and import it in your OpenVPN Client as BjornVPN Config Client."
+	echo "Account: $CLIENT generated, the Config File is available at $homeDir/$CLIENT.ovpn."
+	echo "Download the .ovpn file and import it in your OpenVPN Client as BjornVPN Account!"
 	exit 0
 }
 
