@@ -207,7 +207,7 @@ function defaultAccount () {
 	cp /etc/openvpn/client-template.md "$homeDir/$CLIENT.ovpn"
 	{
 		echo ""
-		echo "http-proxy $IP ${arr[$SquidGEN]}
+		echo "http-proxy $IP ${squidPORTS[$SquidGEN]}
 http-proxy-option CUSTOM-HEADER 'GET https://www.smart.com.ph HTTP/1.0'
 http-proxy-option CUSTOM-HEADER 'Host: www.smart.com.ph'
 http-proxy-option CUSTOM-HEADER 'Proxy-Connection: Keep-Alive'
@@ -672,12 +672,12 @@ function installSquid () {
 
 	http_access allow all
 
-	http_port ${arr[0]}
-	http_port ${arr[1]}
-	http_port ${arr[2]}
-	http_port ${arr[3]}
-	http_port ${arr[4]}
-	http_port ${arr[5]}
+	http_port ${squidPORTS[0]}
+	http_port ${squidPORTS[1]}
+	http_port ${squidPORTS[2]}
+	http_port ${squidPORTS[3]}
+	http_port ${squidPORTS[4]}
+	http_port ${squidPORTS[5]}
 
 	coredump_dir /var/spool/squid" > /etc/squid/squid.conf
 	service squid restart
@@ -1218,7 +1218,7 @@ function createConfig () {
 	{
 		echo "# Payload Setup"
 		echo ""
-		echo "http-proxy $IP ${arr[$SquidGEN]}
+		echo "http-proxy $IP ${squidPORTS[$SquidGEN]}
 http-proxy-option CUSTOM-HEADER '$METHOD https://$PAYLOAD HTTP/1.0'
 http-proxy-option CUSTOM-HEADER 'Host: $PAYLOAD'
 http-proxy-option CUSTOM-HEADER 'Proxy-Connection: Keep-Alive'
@@ -1415,7 +1415,7 @@ function manageMenu () {
 	echo ""
 	echo "It looks like BjornVPN is already installed."
 	echo ""
-	echo "BjornVPN OpenVPN Port: 465, Squid Proxy Port ${arr[0]}/${arr[1]}/${arr[2]}/${arr[3]}/${arr[4]}/${arr[5]}"
+	echo "BjornVPN OpenVPN Port: 465, Squid Proxy Port ${squidPORTS[0]}/${squidPORTS[1]}/${squidPORTS[2]}/${squidPORTS[3]}/${squidPORTS[4]}/${squidPORTS[5]}"
 	echo "To add a New User do choose Option 1:1 for Passwordless Client Configurations!"
 	echo ""
 	echo "What do you want to do?"
@@ -1481,7 +1481,7 @@ initialCheck
 SquidGEN=$(shuf -i 0-5 -n1)
 IP=$(curl -4 icanhazip.com)
 
-declare -a arr=("8000" "3128" "1337" "1338" "8080" "6060")
+declare -a squidPORTS=("8000" "3128" "1337" "1338" "8080" "1336")
 if [[ -e /etc/openvpn/server.conf ]]; then
 	manageMenu
 else
