@@ -610,11 +610,12 @@ function installSquid () {
 
 	http_access allow all
 
-	http_port 8000
-	http_port 8080
-	http_port 3128
-	http_port 1337
-	http_port 1338
+	http_port ${arr[0]}
+	http_port ${arr[1]}
+	http_port ${arr[2]}
+	http_port ${arr[3]}
+	http_port ${arr[4]}
+	http_port ${arr[5]}
 
 	coredump_dir /var/spool/squid" > /etc/squid/squid.conf
 	service squid restart
@@ -1083,13 +1084,13 @@ function newClient () {
 		case $TLS_SIG in
 			1)
 				echo "<tls-crypt>"
-				cat /etc/openvpn/tls-crypt.key
+				cat "/etc/openvpn/tls-crypt.key"
 				echo "</tls-crypt>"
 			;;
 			2)
 				echo "key-direction 1"
 				echo "<tls-auth>"
-				cat /etc/openvpn/tls-auth.key
+				cat "/etc/openvpn/tls-auth.key"
 				echo "</tls-auth>"
 			;;
 		esac
@@ -1180,13 +1181,13 @@ http-proxy-option CUSTOM-HEADER 'Connection: Keep-Alive'"
 		case $TLS_SIG in
 			1)
 				echo "<tls-crypt>"
-				cat /etc/openvpn/tls-crypt.key
+				cat "/etc/openvpn/tls-crypt.key"
 				echo "</tls-crypt>"
 			;;
 			2)
 				echo "key-direction 1"
 				echo "<tls-auth>"
-				cat /etc/openvpn/tls-auth.key
+				cat "/etc/openvpn/tls-auth.key"
 				echo "</tls-auth>"
 			;;
 		esac
@@ -1195,6 +1196,64 @@ http-proxy-option CUSTOM-HEADER 'Connection: Keep-Alive'"
 	echo ""
 	echo "Client Config $CLIENT imported, the Configuration File is available at $homeDir/$CLIENT.ovpn."
 	echo "Download the .ovpn file and import it in your OpenVPN Client as BjornVPN Config Client."
+	exit 0
+}
+
+function defaultAccount () {
+	CLIENT="Trial"
+	cd /etc/openvpn/easy-rsa/ || return
+	./easyrsa build-client-full "$CLIENT" nopass
+	
+	if [ -e "/var/www/html" ]; then
+		homeDir="/var/www/html"
+	elif [ "${SUDO_USER}" ]; then
+		homeDir="/var/www/html"
+	else
+		homeDir="/var/www/html"
+	fi
+
+	if grep -qs "^tls-crypt" /etc/openvpn/server.conf; then
+		TLS_SIG="1"
+	elif grep -qs "^tls-auth" /etc/openvpn/server.conf; then
+		TLS_SIG="2"
+	fi
+
+	cp /etc/openvpn/client-template.md "$homeDir/$CLIENT.ovpn"
+	{
+		echo "# Payload Setup"
+		echo ""
+		echo "http-proxy $IP $SQUID
+http-proxy-option CUSTOM-HEADER 'GET https://www.smart.com.ph HTTP/1.0'
+http-proxy-option CUSTOM-HEADER 'Host: www.smart.com.ph'
+http-proxy-option CUSTOM-HEADER 'Proxy-Connection: Keep-Alive'
+http-proxy-option CUSTOM-HEADER 'Connection: Keep-Alive'"
+		echo ""
+		echo "# Payload Setup"
+		echo ""
+		echo "<ca>"
+		cat "/etc/openvpn/easy-rsa/pki/ca.crt"
+		echo "</ca>"
+		echo "<cert>"
+		awk '/BEGIN/,/END/' "/etc/openvpn/easy-rsa/pki/issued/$CLIENT.crt"
+		echo "</cert>"
+		echo "<key>"
+		cat "/etc/openvpn/easy-rsa/pki/private/$CLIENT.key"
+		echo "</key>"
+
+		case $TLS_SIG in
+			1)
+				echo "<tls-crypt>"
+				cat "/etc/openvpn/tls-crypt.key"
+				echo "</tls-crypt>"
+			;;
+			2)
+				echo "key-direction 1"
+				echo "<tls-auth>"
+				cat "/etc/openvpn/tls-auth.key"
+				echo "</tls-auth>"
+			;;
+		esac
+	} >> "$homeDir/$CLIENT.ovpn"
 	exit 0
 }
 
@@ -1403,16 +1462,16 @@ function setupBanner () {
 # Check for root, TUN, OS...
 initialCheck
 
-# Check if OpenVPN is already installed
+declare -a arr=("8000" "3128" "1337" "1338" "8080" "6060")
 if [[ -e /etc/openvpn/server.conf ]]; then
 	manageMenu
 else
-	declare -a arr=("8000" "3128" "1337" "1338" "8080")
-	RANDOM_SQUID=$(shuf -i 0-4 -n1)
+	RANDOM_SQUID=$(shuf -i 0-5 -n1)
 	SQUID="${arr[$RANDOM_SQUID]}"
 	IP=$(curl -4 icanhazip.com)
 	installSquid
 	installPanel
 	installOpenVPN
+	defaultAccount
 	setupBanner
 fi
