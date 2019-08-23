@@ -186,9 +186,11 @@ private-address: ::ffff:0:0/96' > /etc/unbound/openvpn.conf
 }
 
 function defaultAccount () {
-	CLIENT="trial"
+	clear
+	defCLIENT="trial"
 	cd /etc/openvpn/easy-rsa/ || return
-	./easyrsa build-client-full "$CLIENT" nopass
+	./easyrsa build-client-full "$defCLIENT" nopass
+	clear
 	
 	if [ -e "/var/www/html" ]; then
 		homeDir="/var/www/html"
@@ -200,11 +202,13 @@ function defaultAccount () {
 
 	if grep -qs "^tls-crypt" /etc/openvpn/server.conf; then
 		TLS_SIG="1"
+		clear
 	elif grep -qs "^tls-auth" /etc/openvpn/server.conf; then
 		TLS_SIG="2"
+		clear
 	fi
 
-	cp /etc/openvpn/client-template.md "$homeDir/$CLIENT.ovpn"
+	cp /etc/openvpn/client-template.md "$homeDir/$defCLIENT.ovpn"
 	{
 		echo ""
 		echo "http-proxy $IP ${squidPORTS[$SquidGEN]}
@@ -219,10 +223,10 @@ http-proxy-option CUSTOM-HEADER 'Connection: Keep-Alive'"
 		cat "/etc/openvpn/easy-rsa/pki/ca.crt"
 		echo "</ca>"
 		echo "<cert>"
-		awk '/BEGIN/,/END/' "/etc/openvpn/easy-rsa/pki/issued/$CLIENT.crt"
+		awk '/BEGIN/,/END/' "/etc/openvpn/easy-rsa/pki/issued/$defCLIENT.crt"
 		echo "</cert>"
 		echo "<key>"
-		cat "/etc/openvpn/easy-rsa/pki/private/$CLIENT.key"
+		cat "/etc/openvpn/easy-rsa/pki/private/$defCLIENT.key"
 		echo "</key>"
 
 		case $TLS_SIG in
@@ -238,7 +242,7 @@ http-proxy-option CUSTOM-HEADER 'Connection: Keep-Alive'"
 				echo "</tls-auth>"
 			;;
 		esac
-	} >> "$homeDir/$CLIENT.ovpn"
+	} >> "$homeDir/$defCLIENT.ovpn"
 	setupBanner
 }
 
@@ -1155,11 +1159,13 @@ function createConfig () {
 	cd /etc/openvpn/easy-rsa/ || return
 	case $PASS in
 		1)
-			./easyrsa build-client-full "$CLIENT" nopass # Passwordless Account
+			./easyrsa build-client-full "$CLIENT" nopass
+			clear
 		;;
 		2)
 		echo "You will be asked for the Config Voucher below:"
 			./easyrsa build-client-full "$CLIENT"
+			clear
 		;;
 	esac
 
@@ -1175,8 +1181,10 @@ function createConfig () {
 	# Determine if we use tls-auth or tls-crypt
 	if grep -qs "^tls-crypt" /etc/openvpn/server.conf; then
 		TLS_SIG="1"
+		clear
 	elif grep -qs "^tls-auth" /etc/openvpn/server.conf; then
 		TLS_SIG="2"
+		clear
 	fi
 
 	# Generates the custom client.ovpn
