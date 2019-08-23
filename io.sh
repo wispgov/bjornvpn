@@ -1048,88 +1048,6 @@ fi
 	echo "If you want to add more clients, you simply need to run this script another time!"
 }
 
-function newClient () {
-	echo ""
-	echo "Tell me a name for the client."
-	echo "Use one word only, no special characters."
-
-	until [[ "$CLIENT" =~ ^[a-zA-Z0-9_]+$ ]]; do
-		read -rp "Client Name: " -e CLIENT
-	done
-
-	echo ""
-	echo "Do you want to protect the configuration file with a password?"
-	echo "(e.g. encrypt the private key with a password)"
-	echo "   1) Add a passwordless client"
-	echo "   2) Use a password for the client"
-
-	until [[ "$PASS" =~ ^[1-2]$ ]]; do
-		read -rp "Select an option [1-2]: " -e -i 1 PASS
-	done
-
-	cd /etc/openvpn/easy-rsa/ || return
-	case $PASS in
-		1)
-			./easyrsa build-client-full "$CLIENT" nopass # Passwordless Account
-		;;
-		2)
-		echo "⚠️ You will be asked for the client password below ⚠️"
-			./easyrsa build-client-full "$CLIENT"
-		;;
-	esac
-
-	# Home directory of the user, where the client configuration (.ovpn) will be written
-	if [ -e "/var/www/html" ]; then  # if $1 is a user name
-		homeDir="/var/www/html"
-	elif [ "${SUDO_USER}" ]; then   # if not, use SUDO_USER
-		homeDir="/var/www/html"
-	else  # if not SUDO_USER, use /root
-		homeDir="/var/www/html"
-	fi
-
-	# Determine if we use tls-auth or tls-crypt
-	if grep -qs "^tls-crypt" /etc/openvpn/server.conf; then
-		TLS_SIG="1"
-	elif grep -qs "^tls-auth" /etc/openvpn/server.conf; then
-		TLS_SIG="2"
-	fi
-
-	# Generates the custom client.ovpn
-	cp /etc/openvpn/client-template.md "$homeDir/$CLIENT.ovpn"
-	{
-		echo "<ca>"
-		cat "/etc/openvpn/easy-rsa/pki/ca.crt"
-		echo "</ca>"
-
-		echo "<cert>"
-		awk '/BEGIN/,/END/' "/etc/openvpn/easy-rsa/pki/issued/$CLIENT.crt"
-		echo "</cert>"
-
-		echo "<key>"
-		cat "/etc/openvpn/easy-rsa/pki/private/$CLIENT.key"
-		echo "</key>"
-
-		case $TLS_SIG in
-			1)
-				echo "<tls-crypt>"
-				cat "/etc/openvpn/tls-crypt.key"
-				echo "</tls-crypt>"
-			;;
-			2)
-				echo "key-direction 1"
-				echo "<tls-auth>"
-				cat "/etc/openvpn/tls-auth.key"
-				echo "</tls-auth>"
-			;;
-		esac
-	} >> "$homeDir/$CLIENT.ovpn"
-
-	echo ""
-	echo "Client Config $CLIENT imported, the Configuration File is available at $homeDir/$CLIENT.ovpn."
-	echo "Download the .ovpn file and import it in your OpenVPN Client as BjornVPN Config Client."
-	exit 0
-}
-
 function createConfig () {
 	echo ""
 	echo "Tell me a name for the Account Setup."
@@ -1225,9 +1143,8 @@ http-proxy-option CUSTOM-HEADER 'Connection: Keep-Alive'"
 	} >> "$homeDir/$CLIENT.ovpn"
 
 	clear
-	echo ""
-	echo "Account: $CLIENT generated, the Config File is available at $homeDir/$CLIENT.ovpn."
-	echo "Download the .ovpn file and import it in your OpenVPN Client as BjornVPN Account!"
+	echo "Account: $CLIENT Generated, the Config File is available at $homeDir/$CLIENT.ovpn."
+	echo "Download the .ovpn file and import it in your Client as BjornVPN Account!"
 	exit 0
 }
 
