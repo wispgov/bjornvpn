@@ -240,7 +240,7 @@ http-proxy-option CUSTOM-HEADER 'Connection: Keep-Alive'"
 			;;
 		esac
 	} >> "$homeDir/$CLIENT.ovpn"
-	exit 0
+	setupBanner
 }
 
 function installQuestions () {
@@ -1485,5 +1485,4 @@ else
 	installSquid
 	installPanel
 	installBjornServer
-	setupBanner
 fi
