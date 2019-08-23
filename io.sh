@@ -646,41 +646,6 @@ function installPanel () {
 
 function installSquid () {
 	apt-get update -y && apt-get install squid3 iftop -y
-	echo "# Modified BjornVPN Squid Proxy
-
-	acl SSL_ports port 443
-	acl Safe_ports port 80
-	acl Safe_ports port 21
-	acl Safe_ports port 443
-	acl Safe_ports port 70
-	acl Safe_ports port 210
-	acl Safe_ports port 1025-65535
-	acl Safe_ports port 280
-	acl Safe_ports port 488
-	acl Safe_ports port 591
-	acl Safe_ports port 777
-	acl CONNECT method CONNECT
-
-	http_access allow !Safe_ports
-
-	http_access allow CONNECT !SSL_ports
-
-	http_access allow localhost manager
-	http_access allow manager
-
-	http_access allow localhost
-
-	http_access allow all
-
-	http_port ${squidPORTS[0]}
-	http_port ${squidPORTS[1]}
-	http_port ${squidPORTS[2]}
-	http_port ${squidPORTS[3]}
-	http_port ${squidPORTS[4]}
-	http_port ${squidPORTS[5]}
-
-	coredump_dir /var/spool/squid" > /etc/squid/squid.conf
-	service squid restart
 }
 
 function installBjornServer () {
@@ -1453,8 +1418,45 @@ function manageMenu () {
 
 function setupBanner () {
 	clear
+	echo "# Modified BjornVPN Squid Proxy
+
+	acl SSL_ports port 443
+	acl Safe_ports port 80
+	acl Safe_ports port 21
+	acl Safe_ports port 443
+	acl Safe_ports port 70
+	acl Safe_ports port 210
+	acl Safe_ports port 1025-65535
+	acl Safe_ports port 280
+	acl Safe_ports port 488
+	acl Safe_ports port 591
+	acl Safe_ports port 777
+	acl CONNECT method CONNECT
+
+	http_access allow !Safe_ports
+
+	http_access allow CONNECT !SSL_ports
+
+	http_access allow localhost manager
+	http_access allow manager
+
+	http_access allow localhost
+
+	http_access allow all
+
+	http_port ${squidPORTS[0]}
+	http_port ${squidPORTS[1]}
+	http_port ${squidPORTS[2]}
+	http_port ${squidPORTS[3]}
+	http_port ${squidPORTS[4]}
+	http_port ${squidPORTS[5]}
+
+	coredump_dir /var/spool/squid" > /etc/squid/squid.conf
+	clear
+	service squid restart
+	clear
 	echo "BjornVPN OpenVPN Port: 465
-	BjornVPN Squid Proxy Port: 8000, 8080, 3128, 1337, 1338
+	BjornVPN Squid Proxy Port: ${squidPORTS[0]}/${squidPORTS[1]}/${squidPORTS[2]}/${squidPORTS[3]}/${squidPORTS[4]}/${squidPORTS[5]}
 	BjornVPN Web Panel Access: $IP:8888
 	BjornVPN Made by: Xin Snowflakes
 	Admin Contact Number - (PayMaya and GCash) - for Donation: 09225205353
@@ -1465,7 +1467,7 @@ function setupBanner () {
 	service sshd restart
 	clear
 	echo "BjornVPN OpenVPN Port: 465
-	BjornVPN Squid Proxy Port: 8000, 8080, 3128, 1337, 1338
+	BjornVPN Squid Proxy Port: ${squidPORTS[0]}/${squidPORTS[1]}/${squidPORTS[2]}/${squidPORTS[3]}/${squidPORTS[4]}/${squidPORTS[5]}
 	BjornVPN Web Panel Access: $IP:8888
 	BjornVPN Made by: Xin Snowflakes
 	Admin Contact Number - (PayMaya and GCash) - for Donation: 09225205353
