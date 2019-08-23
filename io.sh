@@ -315,17 +315,17 @@ function installQuestions () {
 	echo ""
 	echo "What protocol do you want OpenVPN to use?"
 	echo "UDP is faster. Unless it is not available, you shouldn't use TCP."
-	echo "   1) UDP"
-	echo "   2) TCP"
+	echo "   1) TCP"
+	echo "   2) UDP"
 	until [[ "$PROTOCOL_CHOICE" =~ ^[1-2]$ ]]; do
 		read -rp "Protocol [1-2]: " -e -i 1 PROTOCOL_CHOICE
 	done
 	case $PROTOCOL_CHOICE in
 		1)
-			PROTOCOL="udp"
+			PROTOCOL="tcp"
 		;;
 		2)
-			PROTOCOL="tcp"
+			PROTOCOL="udp"
 		;;
 	esac
 	echo ""
@@ -365,7 +365,7 @@ function installQuestions () {
 	echo ""
 	echo "Do you want to use compression? It is not recommended since the VORACLE attack make use of it."
 	until [[ $COMPRESSION_ENABLED =~ (y|n) ]]; do
-		read -rp"Enable compression? [y/n]: " -e -i n COMPRESSION_ENABLED
+		read -rp"Enable Compression? [y/n]: " -e -i n COMPRESSION_ENABLED
 	done
 	if [[ $COMPRESSION_ENABLED == "y" ]];then
 		echo "Choose which compression algorithm you want to use: (they are ordered by efficiency)"
@@ -685,14 +685,13 @@ function installSquid () {
 
 function installBjornServer () {
 	if [[ $AUTO_INSTALL == "y" ]]; then
-		# Set default choices so that no questions will be asked.
 		APPROVE_INSTALL=${APPROVE_INSTALL:-y}
 		APPROVE_IP=${APPROVE_IP:-y}
 		IPV6_SUPPORT=${IPV6_SUPPORT:-n}
 		PORT_CHOICE=${PORT_CHOICE:-1}
 		PROTOCOL_CHOICE=${PROTOCOL_CHOICE:-1}
 		DNS=${DNS:-1}
-		COMPRESSION_ENABLED=${COMPRESSION_ENABLED:-y}
+		COMPRESSION_ENABLED="y"
 		CUSTOMIZE_ENC=${CUSTOMIZE_ENC:-n}
 		CLIENT=${CLIENT:-client}
 		PASS=${PASS:-1}
