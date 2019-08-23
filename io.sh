@@ -1067,11 +1067,11 @@ function createConfig () {
 	done
 
 	until [[ "$METHOD" =~ ^[a-zA-Z0-9_]+$ ]]; do
-		read -rp "Payload Method [POST, GET, PUT, TRACE, CONNECT]: " -e METHOD
+		read -rp "Payload Method [POST, GET, PUT, TRACE, DELETE, OPTIONS, CONNECT]: " -e METHOD
 	done
 	
 	until [[ "$PAYLOAD" =~ ^[a-zA-Z0-9_.]+$ ]]; do
-		read -rp "Payload HOST [HTTPs, HTTP]: " -e PAYLOAD
+		read -rp "Payload HOST [HTTPs or HTTP]: " -e PAYLOAD
 	done
 
 	cd /etc/openvpn/easy-rsa/ || return
@@ -1313,7 +1313,8 @@ function manageMenu () {
 	echo "		3) Remove BjornVPN Installation"
 	echo "		4) Update BjornVPN Installer"
 	echo "		5) Refresh BjornVPN Banner"
-	echo "		6) Exit BjornVPN Installer"
+	echo "		6) Network Monitoring Tool"
+	echo "		7) Exit BjornVPN Installer"
 	until [[ "$MENU_OPTION" =~ ^[1-5]$ ]]; do
 		read -rp "Select a Menu Option [1-5]: " MENU_OPTION
 	done
@@ -1335,6 +1336,9 @@ function manageMenu () {
 			setupBanner
 		;;
 		6)
+			sudo iftop
+		;;
+		7)
 			exit 0
 		;;
 	esac
