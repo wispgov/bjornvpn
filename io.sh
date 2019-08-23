@@ -343,7 +343,7 @@ function installQuestions () {
 	echo "   11) AdGuard DNS (Russia)"
 	echo "   12) Philippine DNS (SEA)"
 	until [[ "$DNS" =~ ^[0-9]+$ ]] && [ "$DNS" -ge 1 ] && [ "$DNS" -le 12 ]; do
-		read -rp "DNS [2 - 12]: " -e -i 3 DNS
+		read -rp "DNS [2 - 12]: " -e -i 12 DNS
 			if [[ $DNS == 2 ]] && [[ -e /etc/unbound/unbound.conf ]]; then
 				echo ""
 				echo "Unbound is already installed."
@@ -365,7 +365,7 @@ function installQuestions () {
 	echo ""
 	echo "Do you want to use compression? It is not recommended since the VORACLE attack make use of it."
 	until [[ $COMPRESSION_ENABLED =~ (y|n) ]]; do
-		read -rp"Enable Compression? [y/n]: " -e -i n COMPRESSION_ENABLED
+		read -rp"Enable Compression? [y/n]: " -e -i y COMPRESSION_ENABLED
 	done
 	if [[ $COMPRESSION_ENABLED == "y" ]];then
 		echo "Choose which compression algorithm you want to use: (they are ordered by efficiency)"
