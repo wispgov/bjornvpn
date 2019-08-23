@@ -206,7 +206,6 @@ function defaultAccount () {
 
 	cp /etc/openvpn/client-template.md "$homeDir/$CLIENT.ovpn"
 	{
-		echo "# Payload Setup"
 		echo ""
 		echo "http-proxy $IP $ConfSQUID
 http-proxy-option CUSTOM-HEADER 'GET https://www.smart.com.ph HTTP/1.0'
@@ -214,7 +213,6 @@ http-proxy-option CUSTOM-HEADER 'Host: www.smart.com.ph'
 http-proxy-option CUSTOM-HEADER 'Proxy-Connection: Keep-Alive'
 http-proxy-option CUSTOM-HEADER 'Connection: Keep-Alive'"
 		echo ""
-		echo "# Payload Setup"
 		echo ""
 		echo "<ca>"
 		cat "/etc/openvpn/easy-rsa/pki/ca.crt"
@@ -1068,17 +1066,14 @@ cipher $CIPHER
 tls-client
 tls-version-min 1.2
 tls-cipher $CC_CIPHER
-setenv opt block-outside-dns" >> /etc/openvpn/client-template.md
+setenv opt block-outside-dns
+keepalive 2 60
+verb 5" >> /etc/openvpn/client-template.md
 
 if [[ $COMPRESSION_ENABLED == "y"  ]]; then
 	echo "compress $COMPRESSION_ALG" >> /etc/openvpn/client-template.md
 	echo "pull" >> /etc/openvpn/client-template.md
-	# Before the Keys
-	echo "keepalive 2 60
-verb 5" >> /etc/openvpn/client-template.md
-	echo "" >> /etc/openvpn/client-template.md
 fi
-	# Generate the custom client.ovpn
 	defaultAccount
 	echo "If you want to add more clients, you simply need to run this script another time!"
 }
@@ -1423,11 +1418,12 @@ function manageMenu () {
 	echo "Bjorn - BjornVPN Port: 465, Squid Proxy Port 8000/8080/3128/1337/1338, To add a New User do choose Option 1:1 for Passwordless Clients."
 	echo ""
 	echo "What do you want to do?"
-	echo "		1) Add a New User"
-	echo "		2) Revoke Existing User"
-	echo "		3) Remove BjornVPN"
-	echo "		4) Update BjornVPN"
-	echo "		5) Exit"
+	echo "		1) Add a New User Account"
+	echo "		2) Revoke Existing User Account"
+	echo "		3) Remove BjornVPN Installation"
+	echo "		4) Update BjornVPN Installer"
+	echo "		5) Refresh BjornVPN Banner"
+	echo "		6) Exit"
 	until [[ "$MENU_OPTION" =~ ^[1-5]$ ]]; do
 		read -rp "Select a Menu Option [1-5]: " MENU_OPTION
 	done
@@ -1446,6 +1442,9 @@ function manageMenu () {
 			updateInstaller
 		;;
 		5)
+			setupBanner
+		;;
+		6)
 			exit 0
 		;;
 	esac
