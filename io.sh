@@ -1452,6 +1452,7 @@ function manageMenu () {
 }
 
 function setupBanner () {
+	clear
 	echo "BjornVPN OpenVPN Port: 465
 	BjornVPN Squid Proxy Port: 8000, 8080, 3128, 1337, 1338
 	BjornVPN Web Panel Access: $IP:8888
