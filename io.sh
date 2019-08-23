@@ -1148,7 +1148,7 @@ http-proxy-option CUSTOM-HEADER 'Connection: Keep-Alive'"
 	exit 0
 }
 
-function revokeClient () {
+function removeConfig () {
 	NUMBEROFCLIENTS=$(tail -n +2 /etc/openvpn/easy-rsa/pki/index.txt | grep -c "^V")
 	if [[ "$NUMBEROFCLIENTS" = '0' ]]; then
 		echo ""
@@ -1311,7 +1311,7 @@ function manageMenu () {
 	echo ""
 	echo "What do you want to do?"
 	echo "		1) Add a New User Account"
-	echo "		2) Revoke Existing User Account"
+	echo "		2) Remove Existing User Account"
 	echo "		3) Remove BjornVPN Installation"
 	echo "		4) Update BjornVPN Installer"
 	echo "		5) Refresh BjornVPN Banner"
@@ -1325,7 +1325,7 @@ function manageMenu () {
 			createConfig
 		;;
 		2)
-			revokeClient
+			removeConfig
 		;;
 		3)
 			removeOpenVPN
