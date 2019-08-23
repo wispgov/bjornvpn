@@ -1415,7 +1415,7 @@ function manageMenu () {
 	echo ""
 	echo "It looks like BjornVPN is already installed."
 	echo ""
-	echo "Bjorn - BjornVPN Port: 465, Squid Proxy Port ${arr[0]}/${arr[1]}/${arr[2]}/${arr[3]}/${arr[4]}/${arr[5]}"
+	echo "BjornVPN OpenVPN Port: 465, Squid Proxy Port ${arr[0]}/${arr[1]}/${arr[2]}/${arr[3]}/${arr[4]}/${arr[5]}"
 	echo "To add a New User do choose Option 1:1 for Passwordless Client Configurations!"
 	echo ""
 	echo "What do you want to do?"
@@ -1424,7 +1424,7 @@ function manageMenu () {
 	echo "		3) Remove BjornVPN Installation"
 	echo "		4) Update BjornVPN Installer"
 	echo "		5) Refresh BjornVPN Banner"
-	echo "		6) Exit"
+	echo "		6) Exit BjornVPN Installer"
 	until [[ "$MENU_OPTION" =~ ^[1-5]$ ]]; do
 		read -rp "Select a Menu Option [1-5]: " MENU_OPTION
 	done
