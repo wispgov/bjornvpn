@@ -1462,6 +1462,7 @@ function setupBanner () {
 	Admin Panel Version: 0.002" > /root/template.md
 	sed -i '/Banner/a Banner="/root/template.md"' /etc/ssh/sshd_config
 	service sshd restart
+	clear
 	echo "BjornVPN OpenVPN Port: 465
 	BjornVPN Squid Proxy Port: 8000, 8080, 3128, 1337, 1338
 	BjornVPN Web Panel Access: $IP:8888
