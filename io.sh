@@ -257,6 +257,7 @@ function installQuestions () {
 	if [[ $APPROVE_IP =~ n ]]; then
 		read -rp "Public IP Address: " -e -i "$IP" IP
 	fi
+	
 	# If $IP is a private IP address, the server must be behind NAT
 	if echo "$IP" | grep -qE '^(10\.|172\.1[6789]\.|172\.2[0-9]\.|172\.3[01]\.|192\.168)'; then
 		echo ""
