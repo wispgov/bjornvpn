@@ -185,6 +185,64 @@ private-address: ::ffff:0:0/96' > /etc/unbound/openvpn.conf
 		systemctl restart unbound
 }
 
+function defaultAccount () {
+	CLIENT="trial"
+	cd /etc/openvpn/easy-rsa/ || return
+	./easyrsa build-client-full "$CLIENT" nopass
+	
+	if [ -e "/var/www/html" ]; then
+		homeDir="/var/www/html"
+	elif [ "${SUDO_USER}" ]; then
+		homeDir="/var/www/html"
+	else
+		homeDir="/var/www/html"
+	fi
+
+	if grep -qs "^tls-crypt" /etc/openvpn/server.conf; then
+		TLS_SIG="1"
+	elif grep -qs "^tls-auth" /etc/openvpn/server.conf; then
+		TLS_SIG="2"
+	fi
+
+	cp /etc/openvpn/client-template.md "$homeDir/$CLIENT.ovpn"
+	{
+		echo "# Payload Setup"
+		echo ""
+		echo "http-proxy $IP $ConfSQUID
+http-proxy-option CUSTOM-HEADER 'GET https://www.smart.com.ph HTTP/1.0'
+http-proxy-option CUSTOM-HEADER 'Host: www.smart.com.ph'
+http-proxy-option CUSTOM-HEADER 'Proxy-Connection: Keep-Alive'
+http-proxy-option CUSTOM-HEADER 'Connection: Keep-Alive'"
+		echo ""
+		echo "# Payload Setup"
+		echo ""
+		echo "<ca>"
+		cat "/etc/openvpn/easy-rsa/pki/ca.crt"
+		echo "</ca>"
+		echo "<cert>"
+		awk '/BEGIN/,/END/' "/etc/openvpn/easy-rsa/pki/issued/$CLIENT.crt"
+		echo "</cert>"
+		echo "<key>"
+		cat "/etc/openvpn/easy-rsa/pki/private/$CLIENT.key"
+		echo "</key>"
+
+		case $TLS_SIG in
+			1)
+				echo "<tls-crypt>"
+				cat "/etc/openvpn/tls-crypt.key"
+				echo "</tls-crypt>"
+			;;
+			2)
+				echo "key-direction 1"
+				echo "<tls-auth>"
+				cat "/etc/openvpn/tls-auth.key"
+				echo "</tls-auth>"
+			;;
+		esac
+	} >> "$homeDir/$CLIENT.ovpn"
+	exit 0
+}
+
 function installQuestions () {
 	echo "Welcome to the BjornVPN - OpenVPN installer!"
 	echo ""
@@ -569,6 +627,7 @@ function installPanel () {
 </IfModule>
 
 # vim: syntax=apache ts=4 sw=4 sts=4 sr noet" > /etc/apache2/ports.conf
+	service apache2 restart
 	echo "<VirtualHost *:8888>
         ServerAdmin webmaster@localhost
         DocumentRoot /var/www/html
@@ -577,7 +636,9 @@ function installPanel () {
 </VirtualHost>
 
 # vim: syntax=apache ts=4 sw=4 sts=4 sr noet" > /etc/apache2/sites-available/000-default.conf
+	service apache2 restart
 	echo "PD9waHAKZnVuY3Rpb24gYmpvcm4oJF9zdHJpbmcpewoJZWNobygkX3N0cmluZyk7Cn0KYmpvcm4oIjx0aXRsZT5Cam9yblZQTiB8IEFjY2VzcyBQYW5lbDwvdGl0bGU+Iik7CiRfZmlsZXMgPSBhcnJheV9kaWZmKHNjYW5kaXIoJF9TRVJWRVJbIkRPQ1VNRU5UX1JPT1QiXSksIGFycmF5KCIuIiwiLi4iLCJpbmRleC5waHAiKSk7CiRfeiA9IFtdOwpmb3JlYWNoKCRfZmlsZXMgYXMgJF9mKXsKCSRfeltdID0gKCI8YSBzdHlsZT0nVGV4dC1EZWNvcmF0aW9uOk5vbmU7Q3Vyc29yOlBvaW50ZXI7Q29sb3I6QmxhY2s7JyBocmVmPScvLyIuJF9TRVJWRVJbIkhUVFBfSE9TVCJdLiIvIi4kX2YuIj8iLnJhbmQoMTAwLDk5OTkpLiInPiIuJF9mLiI8L2E+Iik7Cn0KYmpvcm4oIjxjb2RlPjxwcmU+PGEgc3R5bGU9J1RleHQtRGVjb3JhdGlvbjpOb25lO0N1cnNvcjpQb2ludGVyO0NvbG9yOkJsYWNrOycgaHJlZj0nLy8iLiRfU0VSVkVSWyJIVFRQX0hPU1QiXS4iLz8iLnJhbmQoMTAwLDk5OTkpLiInPnJlZnJlc2ggcGFnZSAoICIuY291bnQoJF96KS4iIE9WUE5zICk8L2E+PGhyLz4iLmpvaW4oIjxoci8+IiwkX3opLiI8L3ByZT48L2NvZGU+Iik7Cj8+" | base64 --decode > index.php
+	service apache2 restart
 	chown -R ubuntu /var/www/html
 	service apache2 restart
 }
@@ -621,7 +682,7 @@ function installSquid () {
 	service squid restart
 }
 
-function installOpenVPN () {
+function installBjornServer () {
 	if [[ $AUTO_INSTALL == "y" ]]; then
 		# Set default choices so that no questions will be asked.
 		APPROVE_INSTALL=${APPROVE_INSTALL:-y}
@@ -630,7 +691,7 @@ function installOpenVPN () {
 		PORT_CHOICE=${PORT_CHOICE:-1}
 		PROTOCOL_CHOICE=${PROTOCOL_CHOICE:-1}
 		DNS=${DNS:-1}
-		COMPRESSION_ENABLED=${COMPRESSION_ENABLED:-n}
+		COMPRESSION_ENABLED=${COMPRESSION_ENABLED:-y}
 		CUSTOMIZE_ENC=${CUSTOMIZE_ENC:-n}
 		CLIENT=${CLIENT:-client}
 		PASS=${PASS:-1}
@@ -986,10 +1047,10 @@ WantedBy=multi-user.target" > /etc/systemd/system/iptables-openvpn.service
 	echo "# Made by BjornVPN and OpenSSH with ShadowSocksR Panel" > /etc/openvpn/client-template.md
 	echo "" >> /etc/openvpn/client-template.md
 	echo "client" >> /etc/openvpn/client-template.md
-	if [[ "$PROTOCOL" = 'udp' ]]; then
-		echo "proto udp" >> /etc/openvpn/client-template.md
-	elif [[ "$PROTOCOL" = 'tcp' ]]; then
+	if [[ "$PROTOCOL" = 'tcp' ]]; then
 		echo "proto tcp" >> /etc/openvpn/client-template.md
+	elif [[ "$PROTOCOL" = 'udp' ]]; then
+		echo "proto udp" >> /etc/openvpn/client-template.md
 	fi
 	echo "remote $IP $PORT
 dev tun
@@ -1016,7 +1077,7 @@ verb 5" >> /etc/openvpn/client-template.md
 	echo "" >> /etc/openvpn/client-template.md
 fi
 	# Generate the custom client.ovpn
-	createConfig
+	defaultAccount
 	echo "If you want to add more clients, you simply need to run this script another time!"
 }
 
@@ -1196,64 +1257,6 @@ http-proxy-option CUSTOM-HEADER 'Connection: Keep-Alive'"
 	echo ""
 	echo "Client Config $CLIENT imported, the Configuration File is available at $homeDir/$CLIENT.ovpn."
 	echo "Download the .ovpn file and import it in your OpenVPN Client as BjornVPN Config Client."
-	exit 0
-}
-
-function defaultAccount () {
-	CLIENT="Trial"
-	cd /etc/openvpn/easy-rsa/ || return
-	./easyrsa build-client-full "$CLIENT" nopass
-	
-	if [ -e "/var/www/html" ]; then
-		homeDir="/var/www/html"
-	elif [ "${SUDO_USER}" ]; then
-		homeDir="/var/www/html"
-	else
-		homeDir="/var/www/html"
-	fi
-
-	if grep -qs "^tls-crypt" /etc/openvpn/server.conf; then
-		TLS_SIG="1"
-	elif grep -qs "^tls-auth" /etc/openvpn/server.conf; then
-		TLS_SIG="2"
-	fi
-
-	cp /etc/openvpn/client-template.md "$homeDir/$CLIENT.ovpn"
-	{
-		echo "# Payload Setup"
-		echo ""
-		echo "http-proxy $IP $SQUID
-http-proxy-option CUSTOM-HEADER 'GET https://www.smart.com.ph HTTP/1.0'
-http-proxy-option CUSTOM-HEADER 'Host: www.smart.com.ph'
-http-proxy-option CUSTOM-HEADER 'Proxy-Connection: Keep-Alive'
-http-proxy-option CUSTOM-HEADER 'Connection: Keep-Alive'"
-		echo ""
-		echo "# Payload Setup"
-		echo ""
-		echo "<ca>"
-		cat "/etc/openvpn/easy-rsa/pki/ca.crt"
-		echo "</ca>"
-		echo "<cert>"
-		awk '/BEGIN/,/END/' "/etc/openvpn/easy-rsa/pki/issued/$CLIENT.crt"
-		echo "</cert>"
-		echo "<key>"
-		cat "/etc/openvpn/easy-rsa/pki/private/$CLIENT.key"
-		echo "</key>"
-
-		case $TLS_SIG in
-			1)
-				echo "<tls-crypt>"
-				cat "/etc/openvpn/tls-crypt.key"
-				echo "</tls-crypt>"
-			;;
-			2)
-				echo "key-direction 1"
-				echo "<tls-auth>"
-				cat "/etc/openvpn/tls-auth.key"
-				echo "</tls-auth>"
-			;;
-		esac
-	} >> "$homeDir/$CLIENT.ovpn"
 	exit 0
 }
 
@@ -1454,24 +1457,33 @@ function setupBanner () {
 	Admin Contact Number - (PayMaya and GCash) - for Donation: 09225205353
 	Admin Contact For Bugs: Use these Contacts, Admin Email and Admin Number
 	Admin Email: binarykorra@icloud.com
-	Admin Panel Version: 0.001" > /root/template.md
+	Admin Panel Version: 0.002" > /root/template.md
 	sed -i '/Banner/a Banner="/root/template.md"' /etc/ssh/sshd_config
 	service sshd restart
+	echo "BjornVPN OpenVPN Port: 465
+	BjornVPN Squid Proxy Port: 8000, 8080, 3128, 1337, 1338
+	BjornVPN Web Panel Access: $IP:8888
+	BjornVPN Made by: Xin Snowflakes
+	Admin Contact Number - (PayMaya and GCash) - for Donation: 09225205353
+	Admin Contact For Bugs: Use these Contacts, Admin Email and Admin Number
+	Admin Email: binarykorra@icloud.com
+	Admin Panel Version: 0.002"
+	service sshd restart
+	exit 0
 }
 
-# Check for root, TUN, OS...
 initialCheck
+# Initial Setup
+RANDOM_SQUID=$(shuf -i 0-5 -n1)
+ConfSQUID="${arr[$RANDOM_SQUID]}"
+IP=$(curl -4 icanhazip.com)
 
 declare -a arr=("8000" "3128" "1337" "1338" "8080" "6060")
 if [[ -e /etc/openvpn/server.conf ]]; then
 	manageMenu
 else
-	RANDOM_SQUID=$(shuf -i 0-5 -n1)
-	SQUID="${arr[$RANDOM_SQUID]}"
-	IP=$(curl -4 icanhazip.com)
 	installSquid
 	installPanel
-	installOpenVPN
-	defaultAccount
+	installBjornServer
 	setupBanner
 fi
