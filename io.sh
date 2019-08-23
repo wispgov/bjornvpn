@@ -1143,8 +1143,8 @@ http-proxy-option CUSTOM-HEADER 'Connection: Keep-Alive'"
 	} >> "$homeDir/$CLIENT.ovpn"
 
 	clear
-	echo "Account: $CLIENT Generated, the Config File is available at $homeDir/$CLIENT.ovpn."
-	echo "Download the .ovpn file and import it in your Client as BjornVPN Account!"
+	echo "Account: $CLIENT Generated edit it via $homeDir/$CLIENT.ovpn!"
+	echo "You can now Download the BjornVPN Account via the Web Panel $IP:8888!"
 	exit 0
 }
 
