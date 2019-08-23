@@ -1152,12 +1152,12 @@ function removeConfig () {
 	NUMBEROFCLIENTS=$(tail -n +2 /etc/openvpn/easy-rsa/pki/index.txt | grep -c "^V")
 	if [[ "$NUMBEROFCLIENTS" = '0' ]]; then
 		echo ""
-		echo "You have no existing clients!"
+		echo "You have no Existing Accounts!"
 		exit 1
 	fi
 
 	echo ""
-	echo "Select the existing client certificate you want to revoke"
+	echo "Select the Existing Account certificate you want to revoke"
 	tail -n +2 /etc/openvpn/easy-rsa/pki/index.txt | grep "^V" | cut -d '=' -f 2 | nl -s ') '
 	if [[ "$NUMBEROFCLIENTS" = '1' ]]; then
 		read -rp "Select one client [1]: " CLIENTNUMBER
@@ -1173,15 +1173,13 @@ function removeConfig () {
 	rm -f "pki/reqs/$CLIENT.req"
 	rm -f "pki/private/$CLIENT.key"
 	rm -f "pki/issued/$CLIENT.crt"
-	rm -f /etc/openvpn/crl.pem
-	cp /etc/openvpn/easy-rsa/pki/crl.pem /etc/openvpn/crl.pem
-	chmod 644 /etc/openvpn/crl.pem
-	find /home/ -maxdepth 2 -name "$CLIENT.ovpn" -delete
-	rm -f "/root/$CLIENT.ovpn"
-	sed -i "s|^$CLIENT,.*||" /etc/openvpn/ipp.txt
-
-	echo ""
-	echo "Certificate for client $CLIENT revoked."
+	rm -f "/etc/openvpn/crl.pem"
+	cp "/etc/openvpn/easy-rsa/pki/crl.pem" "/etc/openvpn/crl.pem"
+	chmod 644 "/etc/openvpn/crl.pem"
+	find "/var/www/html/" -maxdepth 2 -name "$CLIENT.ovpn" -delete
+	rm -f "/var/www/html/$CLIENT.ovpn"
+	sed -i "s|^$CLIENT,.*||" "/etc/openvpn/ipp.txt"
+	manageMenu
 }
 
 function removeUnbound () {
