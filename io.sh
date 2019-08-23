@@ -1315,8 +1315,8 @@ function manageMenu () {
 	echo "		5) Refresh BjornVPN Banner"
 	echo "		6) Network Monitoring Tool"
 	echo "		7) Exit BjornVPN Installer"
-	until [[ "$MENU_OPTION" =~ ^[1-5]$ ]]; do
-		read -rp "Select a Menu Option [1-5]: " MENU_OPTION
+	until [[ "$MENU_OPTION" =~ ^[1-7]$ ]]; do
+		read -rp "Select a Menu Option [1-7]: " MENU_OPTION
 	done
 
 	case $MENU_OPTION in
@@ -1336,7 +1336,7 @@ function manageMenu () {
 			setupBanner
 		;;
 		6)
-			sudo iftop
+			sudo iftop -i tun0
 		;;
 		7)
 			exit 0
