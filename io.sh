@@ -207,7 +207,7 @@ function defaultAccount () {
 	cp /etc/openvpn/client-template.md "$homeDir/$CLIENT.ovpn"
 	{
 		echo ""
-		echo "http-proxy $IP $ConfSQUID
+		echo "http-proxy $IP ${arr[$SquidGEN]}
 http-proxy-option CUSTOM-HEADER 'GET https://www.smart.com.ph HTTP/1.0'
 http-proxy-option CUSTOM-HEADER 'Host: www.smart.com.ph'
 http-proxy-option CUSTOM-HEADER 'Proxy-Connection: Keep-Alive'
@@ -1218,7 +1218,7 @@ function createConfig () {
 	{
 		echo "# Payload Setup"
 		echo ""
-		echo "http-proxy $IP $SQUID
+		echo "http-proxy $IP ${arr[$SquidGEN]}
 http-proxy-option CUSTOM-HEADER '$METHOD https://$PAYLOAD HTTP/1.0'
 http-proxy-option CUSTOM-HEADER 'Host: $PAYLOAD'
 http-proxy-option CUSTOM-HEADER 'Proxy-Connection: Keep-Alive'
@@ -1478,8 +1478,7 @@ function setupBanner () {
 
 initialCheck
 # Initial Setup
-RANDOM_SQUID=$(shuf -i 0-5 -n1)
-ConfSQUID="${arr[$RANDOM_SQUID]}"
+SquidGEN=$(shuf -i 0-5 -n1)
 IP=$(curl -4 icanhazip.com)
 
 declare -a arr=("8000" "3128" "1337" "1338" "8080" "6060")
