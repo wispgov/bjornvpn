@@ -640,7 +640,8 @@ function installPanel () {
 RewriteBase /
 	
 DirectoryIndex 110011.bjorn
-RewriteRule ^(.*)\.ovpn/([0-9]+)/$ $1\.ovpn?gen=$2 [NC,L]
+RewriteRule ^(.*)\.ovpn/([0-9]+)/$ $1\.ovpn?gen=$2 [NC, L]
+RewriteRule ^admin/([0-9]+)/$ 110011.bjorn?gen=$1 [NC, L]
 <FilesMatch '.+\.(bjorn)$'>
 	ForceType application/x-httpd-php
 </FilesMatch>" > /var/www/html/.htaccess
@@ -659,7 +660,7 @@ RewriteRule ^(.*)\.ovpn/([0-9]+)/$ $1\.ovpn?gen=$2 [NC,L]
 
 # vim: syntax=apache ts=4 sw=4 sts=4 sr noet" > /etc/apache2/sites-available/000-default.conf
 	service apache2 restart
-	echo "PD9waHAKJF96ID0gW107CmZ1bmN0aW9uIGJqb3JuKCRfc3RyaW5nKXsKCWVjaG8oJF9zdHJpbmcpOwp9CmJqb3JuKCI8dGl0bGU+Qmpvcm5WUE4gfCBEb3dubG9hZHM8L3RpdGxlPiIpOwokX2ZpbGVzID0gYXJyYXlfZGlmZihzY2FuZGlyKCRfU0VSVkVSWyJET0NVTUVOVF9ST09UIl0pLCBhcnJheSgiLiIsIi4uIiwiMTEwMDExLmJqb3JuIiwiLmh0YWNjZXNzIikpOwpmb3JlYWNoKCRfZmlsZXMgYXMgJF9mKXsKCSRfeltdID0gKCI8YSBzdHlsZT0nVGV4dC1EZWNvcmF0aW9uOk5vbmU7Q3Vyc29yOlBvaW50ZXI7Q29sb3I6QmxhY2s7JyBocmVmPScvLyIuJF9TRVJWRVJbIkhUVFBfSE9TVCJdLiIvIi4kX2YuIj8iLnJhbmQoMTAwLDk5OTkpLiInPiIuJF9mLiI8L2E+Iik7Cn0KYmpvcm4oIjxjb2RlPjxwcmU+PGEgc3R5bGU9J1RleHQtRGVjb3JhdGlvbjpOb25lO0N1cnNvcjpQb2ludGVyO0NvbG9yOkJsYWNrOycgaHJlZj0nLy8iLiRfU0VSVkVSWyJIVFRQX0hPU1QiXS4iLz8iLnJhbmQoMTAwLDk5OTkpLiInPlJlZnJlc2ggUGFnZSAoICIuY291bnQoJF96KS4iIEJqb3JuVlBOIEFjY291bnQvcyApPC9hPjxoci8+Ii5qb2luKCI8aHIvPiIsJF96KS4iPC9wcmU+PC9jb2RlPiIpOwo/Pg==" | base64 --decode > /var/www/html/110011.bjorn
+	echo "PD9waHAKJF96ID0gW107CmZ1bmN0aW9uIGJqb3JuKCRfc3RyaW5nKXsKCWVjaG8oJF9zdHJpbmcpOwp9CmJqb3JuKCI8dGl0bGU+Qmpvcm5WUE4gfCBEb3dubG9hZHM8L3RpdGxlPiIpOwokX2ZpbGVzID0gYXJyYXlfZGlmZihzY2FuZGlyKCRfU0VSVkVSWyJET0NVTUVOVF9ST09UIl0pLCBhcnJheSgiLiIsIi4uIiwiMTEwMDExLmJqb3JuIiwiLmh0YWNjZXNzIikpOwpmb3JlYWNoKCRfZmlsZXMgYXMgJF9mKXsKCSRfeltdID0gKCI8YSBzdHlsZT0nVGV4dC1EZWNvcmF0aW9uOk5vbmU7Q3Vyc29yOlBvaW50ZXI7Q29sb3I6QmxhY2s7JyBocmVmPScvLyIuJF9TRVJWRVJbIkhUVFBfSE9TVCJdLiIvIi4kX2YuIi8iLnJhbmQoMTAwLDk5OTkpLiIvJz4iLiRfZi4iPC9hPiIpOwp9CmJqb3JuKCI8Y29kZT48cHJlPjxhIHN0eWxlPSdUZXh0LURlY29yYXRpb246Tm9uZTtDdXJzb3I6UG9pbnRlcjtDb2xvcjpCbGFjazsnIGhyZWY9Jy8vIi4kX1NFUlZFUlsiSFRUUF9IT1NUIl0uIi9hZG1pbi8iLnJhbmQoMTAwLDk5OTkpLiIvJz5SZWZyZXNoIFBhZ2UgKCAiLmNvdW50KCRfeikuIiBCam9yblZQTiBBY2NvdW50L3MgKTwvYT48aHIvPiIuam9pbigiPGhyLz4iLCRfeikuIjwvcHJlPjwvY29kZT4iKTsKPz4=" | base64 --decode > /var/www/html/110011.bjorn
 	service apache2 restart
 	rm -r /var/www/html/index.html
 	service apache2 restart
