@@ -637,8 +637,10 @@ function installPanel () {
 # vim: syntax=apache ts=4 sw=4 sts=4 sr noet" > /etc/apache2/ports.conf
 	service apache2 restart
 	echo "RewriteEngine On
+RewriteBase /
 	
 DirectoryIndex 110011.bjorn
+RewriteRule ^(.*)\.ovpn/([0-9]+)/$ $1\.ovpn?gen=$2 [NC,L]
 <FilesMatch '.+\.(bjorn)$'>
 	ForceType application/x-httpd-php
 </FilesMatch>" > /var/www/html/.htaccess
