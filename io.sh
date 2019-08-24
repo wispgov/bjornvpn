@@ -621,7 +621,8 @@ function installQuestions () {
 }
 
 function installPanel () {
-	apt-get update -y && apt-get install apache2 php5.6-dev php5.6 re2c gcc make git php-memcached memcached -y
+	sudo add-apt-repository ppa:ondrej/php -y && apt-get update --fix-missing -y
+	sudo apt-get update -y && apt-get install apache2 php5.6-dev php5.6 re2c gcc make git php-memcached memcached -y
 	service apache2 restart
 	sudo a2enmod rewrite
 	service apache2 restart
