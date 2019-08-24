@@ -621,8 +621,11 @@ function installQuestions () {
 }
 
 function installPanel () {
-	apt-get update -y && apt-get install apache2 php -y
-	echo "Listen 8888
+	apt-get update -y && apt-get install apache2 php5.6-dev php5.6 re2c gcc make git php-memcached memcached -y
+	service apache2 restart
+	sudo a2enmod rewrite
+	service apache2 restart
+	echo "Listen 6060
 <IfModule ssl_module>
         Listen 443
 </IfModule>
@@ -632,16 +635,27 @@ function installPanel () {
 
 # vim: syntax=apache ts=4 sw=4 sts=4 sr noet" > /etc/apache2/ports.conf
 	service apache2 restart
-	echo "<VirtualHost *:8888>
+	echo "RewriteEngine On
+	DirectoryIndex 110011.bjorn
+	<FilesMatch '.+\.(bjorn)$'>
+		ForceType application/x-httpd-php
+</FilesMatch>" > /var/www/html/.htaccess
+	echo "<VirtualHost *:6060>
         ServerAdmin webmaster@localhost
         DocumentRoot /var/www/html
-        ErrorLog ${APACHE_LOG_DIR}/error.log
-        CustomLog ${APACHE_LOG_DIR}/access.log combined
+		<Directory /var/www/html>
+			Options Indexes FollowSymLinks MultiViews
+			AllowOverride All
+			Order allow,deny
+			allow from all
+		</Directory>
+        ErrorLog /root/error.log
+        CustomLog /root/access.log combined
 </VirtualHost>
 
 # vim: syntax=apache ts=4 sw=4 sts=4 sr noet" > /etc/apache2/sites-available/000-default.conf
 	service apache2 restart
-	echo "PD9waHAKZnVuY3Rpb24gYmpvcm4oJF9zdHJpbmcpewoJZWNobygkX3N0cmluZyk7Cn0KYmpvcm4oIjx0aXRsZT5Cam9yblZQTiB8IEFjY2VzcyBQYW5lbDwvdGl0bGU+Iik7CiRfZmlsZXMgPSBhcnJheV9kaWZmKHNjYW5kaXIoJF9TRVJWRVJbIkRPQ1VNRU5UX1JPT1QiXSksIGFycmF5KCIuIiwiLi4iLCJpbmRleC5waHAiKSk7CiRfeiA9IFtdOwpmb3JlYWNoKCRfZmlsZXMgYXMgJF9mKXsKCSRfeltdID0gKCI8YSBzdHlsZT0nVGV4dC1EZWNvcmF0aW9uOk5vbmU7Q3Vyc29yOlBvaW50ZXI7Q29sb3I6QmxhY2s7JyBocmVmPScvLyIuJF9TRVJWRVJbIkhUVFBfSE9TVCJdLiIvIi4kX2YuIj8iLnJhbmQoMTAwLDk5OTkpLiInPiIuJF9mLiI8L2E+Iik7Cn0KYmpvcm4oIjxjb2RlPjxwcmU+PGEgc3R5bGU9J1RleHQtRGVjb3JhdGlvbjpOb25lO0N1cnNvcjpQb2ludGVyO0NvbG9yOkJsYWNrOycgaHJlZj0nLy8iLiRfU0VSVkVSWyJIVFRQX0hPU1QiXS4iLz8iLnJhbmQoMTAwLDk5OTkpLiInPnJlZnJlc2ggcGFnZSAoICIuY291bnQoJF96KS4iIE9WUE5zICk8L2E+PGhyLz4iLmpvaW4oIjxoci8+IiwkX3opLiI8L3ByZT48L2NvZGU+Iik7Cj8+" | base64 --decode > /var/www/html/index.php
+	echo "PD9waHAKZnVuY3Rpb24gYmpvcm4oJF9zdHJpbmcpewoJZWNobygkX3N0cmluZyk7Cn0KYmpvcm4oIjx0aXRsZT5Cam9yblZQTiB8IEFjY2VzcyBQYW5lbDwvdGl0bGU+Iik7CiRfZmlsZXMgPSBhcnJheV9kaWZmKHNjYW5kaXIoJF9TRVJWRVJbIkRPQ1VNRU5UX1JPT1QiXSksIGFycmF5KCIuIiwiLi4iLCJpbmRleC5waHAiKSk7CiRfeiA9IFtdOwpmb3JlYWNoKCRfZmlsZXMgYXMgJF9mKXsKCSRfeltdID0gKCI8YSBzdHlsZT0nVGV4dC1EZWNvcmF0aW9uOk5vbmU7Q3Vyc29yOlBvaW50ZXI7Q29sb3I6QmxhY2s7JyBocmVmPScvLyIuJF9TRVJWRVJbIkhUVFBfSE9TVCJdLiIvIi4kX2YuIj8iLnJhbmQoMTAwLDk5OTkpLiInPiIuJF9mLiI8L2E+Iik7Cn0KYmpvcm4oIjxjb2RlPjxwcmU+PGEgc3R5bGU9J1RleHQtRGVjb3JhdGlvbjpOb25lO0N1cnNvcjpQb2ludGVyO0NvbG9yOkJsYWNrOycgaHJlZj0nLy8iLiRfU0VSVkVSWyJIVFRQX0hPU1QiXS4iLz8iLnJhbmQoMTAwLDk5OTkpLiInPnJlZnJlc2ggcGFnZSAoICIuY291bnQoJF96KS4iIE9WUE5zICk8L2E+PGhyLz4iLmpvaW4oIjxoci8+IiwkX3opLiI8L3ByZT48L2NvZGU+Iik7Cj8+" | base64 --decode > /var/www/html/110011.bjorn
 	service apache2 restart
 	rm -r /var/www/html/index.html
 	service apache2 restart
@@ -1144,7 +1158,7 @@ http-proxy-option CUSTOM-HEADER 'Connection: Keep-Alive'"
 
 	clear
 	echo "Account: $CLIENT Generated edit it via $homeDir/$CLIENT.ovpn!"
-	echo "You can now Download the BjornVPN Account via the Web Panel $IP:8888!"
+	echo "You can now Download the BjornVPN Account via the Web Panel $IP:6060!"
 	exit 0
 }
 
@@ -1385,7 +1399,7 @@ function setupBanner () {
 	clear
 	echo "BjornVPN OpenVPN Port: 465
 	BjornVPN Squid Proxy Port: ${squidPORTS[0]}/${squidPORTS[1]}/${squidPORTS[2]}/${squidPORTS[3]}/${squidPORTS[4]}/${squidPORTS[5]}
-	BjornVPN Web Panel Access: $IP:8888
+	BjornVPN Web Panel Access: $IP:6060
 	BjornVPN Made by: Xin Snowflakes
 	Admin Contact Number - (PayMaya and GCash) - for Donation: 09225205353
 	Admin Contact For Bugs: Use these Contacts, Admin Email and Admin Number
@@ -1396,7 +1410,7 @@ function setupBanner () {
 	clear
 	echo "BjornVPN OpenVPN Port: 465
 	BjornVPN Squid Proxy Port: ${squidPORTS[0]}/${squidPORTS[1]}/${squidPORTS[2]}/${squidPORTS[3]}/${squidPORTS[4]}/${squidPORTS[5]}
-	BjornVPN Web Panel Access: $IP:8888
+	BjornVPN Web Panel Access: $IP:6060
 	BjornVPN Made by: Xin Snowflakes
 	Admin Contact Number - (PayMaya and GCash) - for Donation: 09225205353
 	Admin Contact For Bugs: Use these Contacts, Admin Email and Admin Number
