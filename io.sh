@@ -622,7 +622,7 @@ function installQuestions () {
 
 function installPanel () {
 	sudo add-apt-repository ppa:ondrej/php -y && apt-get update --fix-missing -y && apt-get update -y
-	sudo apt-get update -y && apt-get install apache2 php-http-request php5.6-dev php5.6 re2c gcc make git php-memcached memcached -y && a2enmod php5.6 && service apache2 restart
+	sudo apt-get update -y && apt-get install apache2 php-http-request php5.6-dev php5.6 re2c gcc make git php-memcached memcached -y
 	service apache2 restart
 	sudo a2enmod rewrite
 	service apache2 restart
@@ -669,6 +669,12 @@ RewriteRule ^admin/([0-9]+)/$ 110011.bjorn?gen=$1 [NC]
 	rm -r /var/www/html/index.html
 	service apache2 restart
 	chown -R ubuntu /var/www/html
+	service apache2 restart
+	sudo a2enmod php5.6
+	clear
+	service apache2 restart
+	clear
+	echo "Web Panel, Fully Installed!"
 	service apache2 restart
 }
 
