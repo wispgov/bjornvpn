@@ -1068,12 +1068,12 @@ tls-client
 tls-version-min 1.2
 tls-cipher $CC_CIPHER
 setenv opt block-outside-dns
-keepalive 2 60" >> /etc/openvpn/client-template.md
+keepalive 2 60
+verb 5
+pull" >> /etc/openvpn/client-template.md
 
 if [[ $COMPRESSION_ENABLED == "y"  ]]; then
 	echo "compress $COMPRESSION_ALG" >> /etc/openvpn/client-template.md
-	echo "verb 5" >> /etc/openvpn/client-template.md
-	echo "pull" >> /etc/openvpn/client-template.md
 fi
 	defaultAccount
 	echo "If you want to add more clients, you simply need to run this script another time!"
