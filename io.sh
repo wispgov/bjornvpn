@@ -657,8 +657,8 @@ function installPanel () {
 	echo "RewriteEngine On
 RewriteBase /
 	
-DirectoryIndex 465011.bjorn
-RewriteRule ^admin/([0-9]+)/$ 465011.bjorn?gen=$1 [NC]
+DirectoryIndex 110011.bjorn
+RewriteRule ^admin/([0-9]+)/$ 110011.bjorn?gen=$1 [NC]
 
 <FilesMatch '\.(bjorn)$'>
         ForceType application/x-httpd-php
