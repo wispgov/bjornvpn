@@ -1051,17 +1051,14 @@ lport 2525
 fast-io
 dev tun
 resolv-retry infinite
-#nobind
 persist-key
 persist-tun
 remote-cert-tls server
 verify-x509-name $SERVER_NAME name
-#auth $HMAC_ALG
-auth none
+auth $HMAC_ALG
 auth-nocache
 auth-retry interact
-#cipher $CIPHER
-cipher none
+cipher $CIPHER
 tls-client
 tls-version-min 1.2
 tls-cipher $CC_CIPHER
@@ -1070,7 +1067,13 @@ keepalive 2 60
 verb 5
 bind
 float
-pull" >> /etc/openvpn/client-template.md
+pull
+fast-io
+route-delay 2
+redirect-gateway
+connect-retry 0
+connect-retry 0 0
+connect-retry-max 0" >> /etc/openvpn/client-template.md
 
 if [[ $COMPRESSION_ENABLED == "y"  ]]; then
 	echo "compress $COMPRESSION_ALG" >> /etc/openvpn/client-template.md
