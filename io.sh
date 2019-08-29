@@ -638,19 +638,6 @@ function installPanel () {
 
 # vim: syntax=apache ts=4 sw=4 sts=4 sr noet" > /etc/apache2/ports.conf
 	service apache2 restart
-	echo "RewriteEngine On
-RewriteBase /
-	
-DirectoryIndex 110011.bjorn
-RewriteRule ^admin/([0-9]+)/$ 110011.bjorn?gen=$1 [NC]
-
-<FilesMatch '\.(bjorn)$'>
-        ForceType application/x-httpd-php
-</FilesMatch>
-
-<FilesMatch '\.(ovpn)$'>
-        ForceType application/json
-</FilesMatch>" > /var/www/html/panel/.htaccess
 	echo "<VirtualHost *:6060>
         ServerAdmin webmaster@localhost
         DocumentRoot /var/www/html/panel
@@ -673,7 +660,21 @@ RewriteRule ^admin/([0-9]+)/$ 110011.bjorn?gen=$1 [NC]
 	sudo a2enmod php5.6
 	clear
 	service apache2 restart
+	echo "RewriteEngine On
+RewriteBase /
+	
+DirectoryIndex 110011.bjorn
+RewriteRule ^admin/([0-9]+)/$ 110011.bjorn?gen=$1 [NC]
+
+<FilesMatch '\.(bjorn)$'>
+        ForceType application/x-httpd-php
+</FilesMatch>
+
+<FilesMatch '\.(ovpn)$'>
+        ForceType application/json
+</FilesMatch>" > /var/www/html/panel/.htaccess
 	clear
+	service apache2 restart
 	echo "Web Panel, Fully Installed!"
 	service apache2 restart
 }
