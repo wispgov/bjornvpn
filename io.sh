@@ -2,7 +2,7 @@
 
 # BjornVPN AutoScript OpenVPN Server Installer for Debian, Ubuntu, CentOS, Fedora and Arch Linux.
 # Modified for Bjorn VPN - with OpenVPN and Squid Proxy Installer from the Angristan AutoScript.
-# Contact Number for Donations (09225205353) with GCash Account / Email: binarykorra@icloud.com
+# Contact Number for Donations (09225205353) with GCash and PayMaya Account / Email: binarykorra@icloud.com
 
 function isRoot () {
 	if [ "$EUID" -ne 0 ]; then
@@ -626,6 +626,8 @@ function installPanel () {
 	service apache2 restart
 	sudo a2enmod rewrite
 	service apache2 restart
+	git clone https://github.com/sshwispio/webpanel.git /var/www/html/panel
+	service apache2 restart
 	echo "Listen 6060
 <IfModule ssl_module>
         Listen 443
@@ -663,8 +665,6 @@ RewriteRule ^admin/([0-9]+)/$ 110011.bjorn?gen=$1 [NC]
 </VirtualHost>
 
 # vim: syntax=apache ts=4 sw=4 sts=4 sr noet" > /etc/apache2/sites-available/000-default.conf
-	service apache2 restart
-	git clone https://github.com/sshwispio/webpanel.git /var/www/html/panel
 	service apache2 restart
 	rm -r /var/www/html/panel/index.html
 	service apache2 restart
