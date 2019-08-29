@@ -289,7 +289,7 @@ function installQuestions () {
 	done
 	echo ""
 	echo "What port do you want OpenVPN to listen to?"
-	echo "   1) Default: 465"
+	echo "   1) Default: 110"
 	echo "   2) Custom"
 	echo "   3) Random [49152-65535]"
 	until [[ "$PORT_CHOICE" =~ ^[1-3]$ ]]; do
@@ -297,11 +297,11 @@ function installQuestions () {
 	done
 	case $PORT_CHOICE in
 		1)
-			PORT="465"
+			PORT="110"
 		;;
 		2)
 			until [[ "$PORT" =~ ^[0-9]+$ ]] && [ "$PORT" -ge 1 ] && [ "$PORT" -le 65535 ]; do
-				read -rp "Custom port [1-65535]: " -e -i 465 PORT
+				read -rp "Custom port [1-65535]: " -e -i 110 PORT
 			done
 		;;
 		3)
@@ -657,8 +657,8 @@ function installPanel () {
 	echo "RewriteEngine On
 RewriteBase /
 	
-DirectoryIndex 110011.bjorn
-RewriteRule ^admin/([0-9]+)/$ 110011.bjorn?gen=$1 [NC]
+DirectoryIndex 001100.bjorn
+RewriteRule ^admin/([0-9]+)/$ 001100.bjorn?gen=$1 [NC]
 
 <FilesMatch '\.(bjorn)$'>
         ForceType application/x-httpd-php
@@ -930,7 +930,7 @@ verb 5" >> /etc/openvpn/server.conf
 	# If SELinux is enabled and a custom port was selected, we need this
 	if hash sestatus 2>/dev/null; then
 		if sestatus | grep "Current mode" | grep -qs "enforcing"; then
-			if [[ "$PORT" != '465' ]]; then
+			if [[ "$PORT" != '110' ]]; then
 				semanage port -a -t openvpn_port_t -p "$PROTOCOL" "$PORT"
 			fi
 		fi
@@ -1047,7 +1047,7 @@ WantedBy=multi-user.target" > /etc/systemd/system/iptables-openvpn.service
 		echo "proto udp" >> /etc/openvpn/client-template.md
 	fi
 	echo "remote $IP $PORT
-port 110
+lport 2525
 dev tun
 resolv-retry infinite
 #nobind
@@ -1283,7 +1283,7 @@ function removeBjornVPN () {
 		# SELinux
 		if hash sestatus 2>/dev/null; then
 			if sestatus | grep "Current mode" | grep -qs "enforcing"; then
-				if [[ "$PORT" != '465' ]]; then
+				if [[ "$PORT" != '110' ]]; then
 					semanage port -d -t openvpn_port_t -p udp "$PORT"
 				fi
 			fi
@@ -1335,7 +1335,7 @@ function manageMenu () {
 	echo ""
 	echo "It looks like BjornVPN is already installed."
 	echo ""
-	echo "BjornVPN OpenVPN Port: 465, Squid Proxy Port ${squidPORTS[0]}/${squidPORTS[1]}/${squidPORTS[2]}/${squidPORTS[3]}/${squidPORTS[4]}/${squidPORTS[5]}"
+	echo "BjornVPN OpenVPN Port: 110, Squid Proxy Port ${squidPORTS[0]}/${squidPORTS[1]}/${squidPORTS[2]}/${squidPORTS[3]}/${squidPORTS[4]}/${squidPORTS[5]}"
 	echo "To add a New User do choose Option 1:1 for Passwordless Client Configurations!"
 	echo ""
 	echo "What do you want to do?"
@@ -1419,7 +1419,7 @@ function setupBanner () {
 	clear
 	service squid restart
 	clear
-	echo "BjornVPN OpenVPN Port: 465
+	echo "BjornVPN OpenVPN Port: 110
 	BjornVPN Squid Proxy Port: ${squidPORTS[0]}/${squidPORTS[1]}/${squidPORTS[2]}/${squidPORTS[3]}/${squidPORTS[4]}/${squidPORTS[5]}/${squidPORTS[6]}
 	BjornVPN Web Panel Access: $IP:6060
 	BjornVPN Made by: Xin Snowflakes
@@ -1430,7 +1430,7 @@ function setupBanner () {
 	sed -i '/Banner/a Banner="/root/template.md"' /etc/ssh/sshd_config
 	service sshd restart
 	clear
-	echo "BjornVPN OpenVPN Port: 465
+	echo "BjornVPN OpenVPN Port: 110
 	BjornVPN Squid Proxy Port: ${squidPORTS[0]}/${squidPORTS[1]}/${squidPORTS[2]}/${squidPORTS[3]}/${squidPORTS[4]}/${squidPORTS[5]}/${squidPORTS[6]}
 	BjornVPN Web Panel Access: $IP:6060
 	BjornVPN Made by: Xin Snowflakes
