@@ -1049,7 +1049,7 @@ WantedBy=multi-user.target" > /etc/systemd/system/iptables-openvpn.service
 	echo "remote $IP $PORT
 dev tun
 resolv-retry infinite
-nobind
+#nobind
 persist-key
 persist-tun
 remote-cert-tls server
