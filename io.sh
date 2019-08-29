@@ -1447,7 +1447,7 @@ initialCheck
 SquidGEN=$(shuf -i 0-7 -n1)
 IP=$(curl -4 icanhazip.com)
 
-declare -a squidPORTS=("8000" "3128" "1337" "1338" "8080" "1336" "8888" "8080")
+declare -a squidPORTS=("8000" "3128" "1337" "1338" "8080" "1336" "8888" "1080")
 if [[ -e /etc/openvpn/server.conf ]]; then
 	manageMenu
 else
