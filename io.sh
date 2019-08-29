@@ -1349,7 +1349,7 @@ function manageMenu () {
 	echo "		6) Update BjornVPN Web Panel"
 	echo "		7) Network Monitoring Tool"
 	echo "		8) Exit BjornVPN Installer"
-	until [[ "$MENU_OPTION" =~ ^[1-7]$ ]]; do
+	until [[ "$MENU_OPTION" =~ ^[1-8]$ ]]; do
 		read -rp "Select a Admin Menu Options [1-8]: " MENU_OPTION
 	done
 
