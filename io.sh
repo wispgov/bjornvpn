@@ -1048,6 +1048,7 @@ WantedBy=multi-user.target" > /etc/systemd/system/iptables-openvpn.service
 	fi
 	echo "remote $IP $PORT
 lport 2525
+fast-io
 dev tun
 resolv-retry infinite
 #nobind
