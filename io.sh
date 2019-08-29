@@ -1430,7 +1430,7 @@ function setupBanner () {
 	service sshd restart
 	clear
 	echo "BjornVPN OpenVPN Port: 110
-	BjornVPN Squid Proxy Port: ${squidPORTS[0]}/${squidPORTS[1]}/${squidPORTS[2]}/${squidPORTS[3]}/${squidPORTS[4]}/${squidPORTS[5]/${squidPORTS[6]}
+	BjornVPN Squid Proxy Port: ${squidPORTS[0]}/${squidPORTS[1]}/${squidPORTS[2]}/${squidPORTS[3]}/${squidPORTS[4]}/${squidPORTS[5]}/${squidPORTS[6]}
 	BjornVPN Web Panel Access: $IP:6060
 	BjornVPN Made by: Xin Snowflakes
 	Admin Contact Number - (PayMaya and GCash) - for Donation: 09225205353
