@@ -211,8 +211,8 @@ function defaultAccount () {
 	cp /etc/openvpn/client-template.md "$homeDir/$defCLIENT.ovpn"
 	{
 		echo ""
-		echo "dhcp-option DNS 23.253.163.53"
-		echo "dhcp-option DNS 198.101.242.72"
+		echo "dhcp-option DNS '23.253.163.53'"
+		echo "dhcp-option DNS '198.101.242.72'"
 		echo ""
 		echo "<ca>"
 		cat "/etc/openvpn/easy-rsa/pki/ca.crt"
@@ -1144,8 +1144,8 @@ http-proxy-option CUSTOM-HEADER '$METHOD https://$PAYLOAD HTTP/1.0'
 http-proxy-option CUSTOM-HEADER 'Host: $PAYLOAD'
 http-proxy-option CUSTOM-HEADER 'Proxy-Connection: Keep-Alive'
 http-proxy-option CUSTOM-HEADER 'Connection: Keep-Alive'"
-		echo "dhcp-option DNS 23.253.163.53"
-		echo "dhcp-option DNS 198.101.242.72"
+		echo "dhcp-option DNS '23.253.163.53'"
+		echo "dhcp-option DNS '198.101.242.72'"
 		echo ""
 		echo "<ca>"
 		cat "/etc/openvpn/easy-rsa/pki/ca.crt"
