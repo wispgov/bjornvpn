@@ -211,11 +211,6 @@ function defaultAccount () {
 	cp /etc/openvpn/client-template.md "$homeDir/$defCLIENT.ovpn"
 	{
 		echo ""
-		echo "http-proxy $IP ${squidPORTS[$SquidGEN]}
-http-proxy-option CUSTOM-HEADER 'GET https://www.smart.com.ph HTTP/1.0'
-http-proxy-option CUSTOM-HEADER 'Host: www.smart.com.ph'
-http-proxy-option CUSTOM-HEADER 'Proxy-Connection: Keep-Alive'
-http-proxy-option CUSTOM-HEADER 'Connection: Keep-Alive'"
 		echo "dhcp-option DNS 23.253.163.53"
 		echo "dhcp-option DNS 198.101.242.72"
 		echo ""
@@ -397,10 +392,9 @@ function installQuestions () {
 	echo "See https://github.com/angristan/openvpn-install#security-and-encryption to learn more."
 	echo ""
 	until [[ $CUSTOMIZE_ENC =~ (y|n) ]]; do
-		read -rp "Customize encryption settings? [y/n]: " -e -i n CUSTOMIZE_ENC
+		read -rp "Customize Encryption Settings? [y/n]: " -e -i n CUSTOMIZE_ENC
 	done
 	if [[ $CUSTOMIZE_ENC == "n" ]];then
-		# Use default, sane and fast parameters
 		CIPHER="AES-128-GCM"
 		CERT_TYPE="1" # ECDSA
 		CERT_CURVE="prime256v1"
@@ -1060,9 +1054,12 @@ persist-key
 persist-tun
 remote-cert-tls server
 verify-x509-name $SERVER_NAME name
-auth $HMAC_ALG
+#auth $HMAC_ALG
+auth none
 auth-nocache
-cipher $CIPHER
+auth-retry interact
+#cipher $CIPHER
+cipher none
 tls-client
 tls-version-min 1.2
 tls-cipher $CC_CIPHER
