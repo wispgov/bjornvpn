@@ -1359,7 +1359,7 @@ function adminOptions () {
 	echo "To add a New User do choose Option 1:1 for Passwordless Client Configurations!"
 	echo ""
 	echo "What do you want to do?"
-	echo "		1) Add a New User Account w/ Config"
+	echo "		1) Add User Account with Config"
 	echo "		2) Remove Existing User Account"
 	echo "		3) Remove BjornVPN Installation"
 	echo "		4) Update BjornVPN Installer"
