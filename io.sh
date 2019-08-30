@@ -680,6 +680,8 @@ function installSquid () {
 }
 
 function installBjornServer () {
+	installSquid
+	installPanel
 	if [[ $AUTO_INSTALL == "y" ]]; then
 		APPROVE_INSTALL=${APPROVE_INSTALL:-y}
 		APPROVE_IP=${APPROVE_IP:-y}
@@ -1475,7 +1477,5 @@ declare -a squidPORTS=("8000" "3128" "1337" "1338" "8080" "1336" "8888")
 if [[ -e /etc/openvpn/server.conf ]]; then
 	adminOptions
 else
-	installSquid
-	installPanel
 	installBjornServer
 fi
