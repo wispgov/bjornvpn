@@ -189,7 +189,7 @@ function defaultAccount () {
 	clear
 	defCLIENT="trial"
 	cd /etc/openvpn/easy-rsa/ || return
-	./easyrsa build-client-full "$defCLIENT" nopass
+	./easyrsa build-client-full "$defCLIENT" #nopass
 	clear
 	
 	if [ -e "/var/www/html/panel" ]; then
@@ -238,6 +238,8 @@ function defaultAccount () {
 			;;
 		esac
 	} >> "$homeDir/$defCLIENT.ovpn"
+	sudo useradd "trial" -M -s /bin/false
+	echo -e "trial\ntrial" | passwd "trial"
 	setupBanner
 }
 
@@ -765,14 +767,14 @@ function installBjornServer () {
 	echo "set_var EASYRSA_REQ_CN $SERVER_CN" >> vars
 	# Create the PKI, set up the CA, the DH params and the server certificate
 	./easyrsa init-pki
-	./easyrsa --batch build-ca nopass
+	./easyrsa --batch build-ca #nopass
 
 	if [[ $DH_TYPE == "2" ]]; then
 		# ECDH keys are generated on-the-fly so we don't need to generate them beforehand
 		openssl dhparam -out dh.pem $DH_KEY_SIZE
 	fi
 
-	./easyrsa build-server-full "$SERVER_NAME" nopass
+	./easyrsa build-server-full "$SERVER_NAME" #nopass
 	EASYRSA_CRL_DAYS=3650 ./easyrsa gen-crl
 
 	case $TLS_SIG in
@@ -1058,6 +1060,7 @@ remote-cert-tls server
 verify-x509-name $SERVER_NAME name
 auth $HMAC_ALG
 auth-nocache
+auth-user-pass
 auth-retry interact
 cipher $CIPHER
 tls-client
@@ -1123,7 +1126,7 @@ function createConfig () {
 	cd /etc/openvpn/easy-rsa/ || return
 	case $PASS in
 		1)
-			./easyrsa build-client-full "$CLIENT" nopass
+			./easyrsa build-client-full "$CLIENT" #nopass
 			clear
 		;;
 		2)
@@ -1191,6 +1194,7 @@ http-proxy-option CUSTOM-HEADER 'Connection: Keep-Alive'"
 	clear
 	echo "Account: $CLIENT Generated edit it via $homeDir/$CLIENT.ovpn!"
 	echo "You can now Download the BjornVPN Account via the Web Panel $IP:6060!"
+	createUser
 	exit 0
 }
 
@@ -1355,14 +1359,14 @@ function adminOptions () {
 	echo "To add a New User do choose Option 1:1 for Passwordless Client Configurations!"
 	echo ""
 	echo "What do you want to do?"
-	echo "		1) Add a New User Account"
+	echo "		1) Add a New User Account w/ Config"
 	echo "		2) Remove Existing User Account"
 	echo "		3) Remove BjornVPN Installation"
 	echo "		4) Update BjornVPN Installer"
 	echo "		5) Refresh BjornVPN Banner"
 	echo "		6) Update BjornVPN Web Panel"
 	echo "		7) Network Monitoring Tool"
-	echo "		8) Create BjornVPN Users"
+	echo "		8) Create Casual BjornVPN Users"
 	echo "		9) Exit BjornVPN Installer"
 	until [[ "$MENU_OPTION" =~ ^[1-9]$ ]]; do
 		read -rp "Select a Admin Menu Options [1-9]: " MENU_OPTION
