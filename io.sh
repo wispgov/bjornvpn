@@ -189,7 +189,7 @@ function defaultAccount () {
 	clear
 	defCLIENT="trial"
 	cd /etc/openvpn/easy-rsa/ || return
-	echo -e "$defCLIENT\n$defCLIENT" | ./easyrsa build-client-full "$defCLIENT"
+	./easyrsa build-client-full "$defCLIENT"
 	clear
 	
 	if [ -e "/var/www/html/panel" ]; then
@@ -1113,14 +1113,10 @@ function createConfig () {
 		read -rp "Payload HOST [HTTPs or HTTP]: " -e PAYLOAD
 	done
 	
-	until [[ "$PASSLOCK" =~ ^[a-zA-Z0-9_]+$ ]]; do
-		read -rp "Account Lock: " -e PASSLOCK
-	done
-
 	cd /etc/openvpn/easy-rsa/ || return
 	case $PASS in
 		1)
-			echo -e "$PASSLOCK\n$PASSLOCK" ./easyrsa build-client-full "$CLIENT"
+			./easyrsa build-client-full "$CLIENT"
 			clear
 		;;
 		2)
