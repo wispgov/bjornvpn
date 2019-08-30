@@ -914,6 +914,7 @@ tls-server
 tls-version-min 1.2
 tls-cipher $CC_CIPHER
 status /var/log/openvpn/status.log
+duplicate-cn
 verb 5" >> /etc/openvpn/server.conf
 
 	# Create log dir
@@ -1069,6 +1070,8 @@ bind
 float
 pull
 fast-io
+reneg-sec 0
+log /dev/null
 route-delay 2
 redirect-gateway
 connect-retry 0
@@ -1080,6 +1083,15 @@ if [[ $COMPRESSION_ENABLED == "y"  ]]; then
 fi
 	defaultAccount
 	echo "If you want to add more clients, you simply need to run this script another time!"
+}
+
+function createUser () {
+	read -rp "BjornVPN Username: " -e user
+	sudo useradd $user -M -s /bin/false
+	read -rp "BjornVPN Password: " -e pass
+	echo -e "$pass\n$pass" | passwd $user
+	clear
+	sudo echo "BjornVPN | Username: $user / Password: $pass created!"
 }
 
 function createConfig () {
@@ -1213,7 +1225,7 @@ function removeConfig () {
 	find "/var/www/html/panel/" -maxdepth 2 -name "$CLIENT.ovpn" -delete
 	rm -f "/var/www/html/panel/$CLIENT.ovpn"
 	sed -i "s|^$CLIENT,.*||" "/etc/openvpn/ipp.txt"
-	manageMenu
+	adminOptions
 }
 
 function removeUnbound () {
@@ -1333,7 +1345,7 @@ function updateInstaller () {
 	exit 0
 }
 
-function manageMenu () {
+function adminOptions () {
 	clear
 	echo "Welcome to BjornVPN!"
 	echo ""
@@ -1350,9 +1362,10 @@ function manageMenu () {
 	echo "		5) Refresh BjornVPN Banner"
 	echo "		6) Update BjornVPN Web Panel"
 	echo "		7) Network Monitoring Tool"
-	echo "		8) Exit BjornVPN Installer"
-	until [[ "$MENU_OPTION" =~ ^[1-8]$ ]]; do
-		read -rp "Select a Admin Menu Options [1-8]: " MENU_OPTION
+	echo "		8) Create BjornVPN Users"
+	echo "		9) Exit BjornVPN Installer"
+	until [[ "$MENU_OPTION" =~ ^[1-9]$ ]]; do
+		read -rp "Select a Admin Menu Options [1-9]: " MENU_OPTION
 	done
 
 	case $MENU_OPTION in
@@ -1378,6 +1391,9 @@ function manageMenu () {
 			sudo iftop -i tun0 || return
 		;;
 		8)
+			createUser
+		;;
+		9)
 			exit 0
 		;;
 	esac
@@ -1453,7 +1469,7 @@ IP=$(curl -4 icanhazip.com)
 
 declare -a squidPORTS=("8000" "3128" "1337" "1338" "8080" "1336" "8888")
 if [[ -e /etc/openvpn/server.conf ]]; then
-	manageMenu
+	adminOptions
 else
 	installSquid
 	installPanel
