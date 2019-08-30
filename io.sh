@@ -1359,10 +1359,9 @@ function adminOptions () {
 	echo "		5) Refresh BjornVPN Banner"
 	echo "		6) Update BjornVPN Web Panel"
 	echo "		7) Network Monitoring Tool"
-	echo "		8) Create Casual BjornVPN Users"
-	echo "		9) Exit BjornVPN Installer"
-	until [[ "$MENU_OPTION" =~ ^[1-9]$ ]]; do
-		read -rp "Select a Admin Menu Options [1-9]: " MENU_OPTION
+	echo "		8) Exit BjornVPN Installer"
+	until [[ "$MENU_OPTION" =~ ^[1-8]$ ]]; do
+		read -rp "Select a Admin Menu Options [1-8]: " MENU_OPTION
 	done
 
 	case $MENU_OPTION in
@@ -1388,9 +1387,6 @@ function adminOptions () {
 			sudo iftop -i tun0 || return
 		;;
 		8)
-			createUser
-		;;
-		9)
 			exit 0
 		;;
 	esac
