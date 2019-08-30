@@ -1328,11 +1328,11 @@ function removeBjornVPN () {
 		# Cleanup
 		find /home/ -maxdepth 2 -name "*.ovpn" -delete
 		find /root/ -maxdepth 1 -name "*.ovpn" -delete
-		rm -rf /var/www/html/panel
-		rm -rf /etc/openvpn
-		rm -rf /usr/share/doc/openvpn*
-		rm -f /etc/sysctl.d/20-openvpn.conf
-		rm -rf /var/log/openvpn
+		rm -r "/var/www/html/panel/"
+		rm -r "/etc/openvpn/"
+		rm -rf "/usr/share/doc/openvpn*"
+		rm -f "/etc/sysctl.d/20-openvpn.conf"
+		rm -rf "/var/log/openvpn"
 
 		# Unbound
 		if [[ -e /etc/unbound/openvpn.conf ]]; then
