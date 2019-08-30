@@ -189,7 +189,7 @@ function defaultAccount () {
 	clear
 	defCLIENT="trial"
 	cd /etc/openvpn/easy-rsa/ || return
-	./easyrsa build-client-full "$defCLIENT" nopass
+	echo -e "$defCLIENT\n$defCLIENT" | ./easyrsa build-client-full "$defCLIENT"
 	clear
 	
 	if [ -e "/var/www/html/panel" ]; then
@@ -238,8 +238,6 @@ function defaultAccount () {
 			;;
 		esac
 	} >> "$homeDir/$defCLIENT.ovpn"
-	sudo useradd "trial" -M -s /bin/false
-	echo -e "trial\ntrial" | passwd "trial"
 	setupBanner
 }
 
@@ -1062,7 +1060,6 @@ remote-cert-tls server
 verify-x509-name $SERVER_NAME name
 auth $HMAC_ALG
 auth-nocache
-auth-user-pass
 auth-retry interact
 cipher $CIPHER
 tls-client
@@ -1090,15 +1087,6 @@ fi
 	echo "If you want to add more clients, you simply need to run this script another time!"
 }
 
-function createUser () {
-	read -rp "BjornVPN Username: " -e user
-	sudo useradd $user -M -s /bin/false
-	read -rp "BjornVPN Password: " -e pass
-	echo -e "$pass\n$pass" | passwd $user
-	clear
-	sudo echo "BjornVPN | Username: $user / Password: $pass created!"
-}
-
 function createConfig () {
 	echo ""
 	echo "Tell me a name for the Account Setup."
@@ -1124,11 +1112,15 @@ function createConfig () {
 	until [[ "$PAYLOAD" =~ ^[a-zA-Z0-9_.]+$ ]]; do
 		read -rp "Payload HOST [HTTPs or HTTP]: " -e PAYLOAD
 	done
+	
+	until [[ "$PASSLOCK" =~ ^[a-zA-Z0-9_]+$ ]]; do
+		read -rp "Account Lock: " -e PASSLOCK
+	done
 
 	cd /etc/openvpn/easy-rsa/ || return
 	case $PASS in
 		1)
-			./easyrsa build-client-full "$CLIENT" nopass
+			echo -e "$PASSLOCK\n$PASSLOCK" ./easyrsa build-client-full "$CLIENT"
 			clear
 		;;
 		2)
@@ -1196,7 +1188,6 @@ http-proxy-option CUSTOM-HEADER 'Connection: Keep-Alive'"
 	clear
 	echo "Account: $CLIENT Generated edit it via $homeDir/$CLIENT.ovpn!"
 	echo "You can now Download the BjornVPN Account via the Web Panel $IP:6060!"
-	createUser
 	exit 0
 }
 
