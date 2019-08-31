@@ -189,7 +189,7 @@ function defaultAccount () {
 	clear
 	defCLIENT="trial"
 	cd /etc/openvpn/easy-rsa/ || return
-	./easyrsa build-client-full "$defCLIENT"
+	./easyrsa build-client-full "$defCLIENT" nopass
 	clear
 	
 	if [ -e "/var/www/html/panel" ]; then
@@ -1116,7 +1116,7 @@ function createConfig () {
 	cd /etc/openvpn/easy-rsa/ || return
 	case $PASS in
 		1)
-			./easyrsa build-client-full "$CLIENT"
+			./easyrsa build-client-full "$CLIENT" nopass
 			clear
 		;;
 		2)
