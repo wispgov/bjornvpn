@@ -21,6 +21,8 @@ Hacked and Demoed by Colin O' Flynn which uses SPI as On-Chip Debugging.
 
 * printenv security = Print Env Security
 
+* setenv = Set Environment Values
+
 * printenv = Print Environment
 
 * saveenv = Save Environment
