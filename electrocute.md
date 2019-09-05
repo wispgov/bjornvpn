@@ -1,9 +1,10 @@
 # Serial Bus, Wink Attack:
 
+* References:
 
 http://colinoflynn.com/2016/07/getting-root-on-philips-hue-bridge-2-0/
 
-Hacked and Demoed by Colin O' Flynn which uses SPI as On-Chip Debugging.
+* Hacked and Demoed by Colin O' Flynn which uses SPI as On-Chip Debugging.
 
 
 # Generates a Random MD5 Hash for the USB Attack:
