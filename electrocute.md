@@ -1,6 +1,11 @@
 # Serial Bus, Wink Attack:
 
 
+http://colinoflynn.com/2016/07/getting-root-on-philips-hue-bridge-2-0/
+
+Hacked and Demoed by Colin O' Flynn.
+
+
 # Generates a Random MD5 Hash for the USB Attack:
 
 
