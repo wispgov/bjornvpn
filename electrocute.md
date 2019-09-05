@@ -18,9 +18,11 @@ echo "snow" | mkpasswd --stdin --method=md5
 
 
 setenv security = Set Env Security
+
 printenv security = Print Env Security
 
 printenv = Print Environment
+
 saveenv = Save Environment
 
 
