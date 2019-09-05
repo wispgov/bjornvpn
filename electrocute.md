@@ -23,7 +23,7 @@ Hacked and Demoed by Colin O' Flynn which uses SPI as On-Chip Debugging.
 
 * setenv = Set Environment Values
 
-* printenv = Print Environment
+* printenv = Print Environment Values
 
 * saveenv = Save Environment
 
