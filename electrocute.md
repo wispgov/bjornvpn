@@ -8,7 +8,12 @@ http://colinoflynn.com/2016/07/getting-root-on-philips-hue-bridge-2-0/
 
 https://github.com/sshwispio/bjornvpn/blob/master/vim.md
 
-* Hacked and Demoed by Colin O' Flynn which uses SPI as On-Chip Debugging.
+
+
+# Coprights and Demo:
+
+* Hacked and Demoed by Colin O' Flynn which uses SPI as On-Chip Debugging or (OCD)
+
 
 
 # Generates a Random MD5 Hash for the USB Attack:
