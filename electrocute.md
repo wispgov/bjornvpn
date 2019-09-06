@@ -21,6 +21,10 @@ https://github.com/sshwispio/bjornvpn/blob/master/vim.md
 
 * echo "snow" | mkpasswd --stdin --method=md5
 
+Use Cases:
+
+* setenv security 'MD5-Salted-Hash'
+
 
 
 
