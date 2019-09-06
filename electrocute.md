@@ -1,8 +1,12 @@
 # Serial Bus, Wink Attack:
 
-* References:
+* References for the Pin2Pwn or Wink Attack:
 
 http://colinoflynn.com/2016/07/getting-root-on-philips-hue-bridge-2-0/
+
+* References for VIM or VI Commands:
+
+https://github.com/sshwispio/bjornvpn/blob/master/vim.md
 
 * Hacked and Demoed by Colin O' Flynn which uses SPI as On-Chip Debugging.
 
