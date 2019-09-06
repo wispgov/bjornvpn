@@ -39,7 +39,20 @@ Use Cases:
 
 * printenv = Print Environment Values
 
-* saveenv = Save Environment
+* saveenv = Save Environment Values
+
+
+# References and Definition of Terms:
+
+
+* UART = Universal Asynchronous Receiver Transmitter.
+
+* SPI = Serial Port Interface.
+
+* JTAG = Joint Task Action Group.
+
+* USB = Universal Serial Bus.
+
 
 
 
