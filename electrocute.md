@@ -49,7 +49,7 @@ Use Cases:
 
 * SPI = Serial Port Interface.
 
-* JTAG = Joint Task Action Group.
+* JTAG = Joint Test Action Group.
 
 * USB = Universal Serial Bus.
 
