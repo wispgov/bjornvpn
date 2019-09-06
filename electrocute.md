@@ -55,13 +55,13 @@ Use Cases:
 
 
 
+# About Me
+
+
+I currently work for Information Security in Dallas, Texas and yes I find Loop-Holes in a System. I am an Electronics Hacker and Loves Port Scanning, Fuzzing and Boundary Scanning all my Life. Former Web Vulnerabilities Exploit Researcher and I fond myself with OpenVPN (of whom I am certainly good at, As I own a VPN Network of which is my Sideline Business). I am an avid Security Researcher who likes to Research all kinds of Hacks. I am a CISSP Student and soon-to-be. I usually study under the Shadows with VPN under my Masks. Which means you can't find me. My Quote? "Hard to Find, Easy to Talk, But Difficult to Handle." as I am a once Hard-Headed ignorrant Hacker. But would listen under circumstances of neccessities and yes, I would help you. If I can understand your Situation. And if you really need it.
+
+
 
 # Compiled By Me:
 
 ( C ) - Snowflakes
-
-
-# About Me
-
-
-I currently work for Information Security in Dallas, Texas and yes I find Loop-Holes in a System, I am an Electronics Hacker and Loves Port Scanning, Fuzzing and Boundary Scanning all my Life, Former Web Vulnerabilities Exploit Researcher and I fond myself with OpenVPN, I am an avid Security Researcher who likes to Research all kinds of Hacks, I am a CISSP Student and soon-to-be. I usually study under the Shadows with VPN under my Masks. Which means you can't find me. My Quote? "Easy to Find, Hard to Handle." as I am a once Hard-Headed ignorrant Hacker. But would listen under circumstances of neccessities and yes, I would help you. If I can understand your Situation. And if you really need it.
