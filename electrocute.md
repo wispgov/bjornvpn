@@ -1,4 +1,4 @@
-# Serial Bus, Wink Attack:
+# Serial Bus, or USB and SPI Hack Attack:
 
 * References for the Pin2Pwn or Wink Attack:
 
