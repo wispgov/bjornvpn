@@ -47,7 +47,7 @@ Use Cases:
 
 * UART = Universal Asynchronous Receiver Transmitter.
 
-* SPI = Serial Port Interface.
+* SPI = Serial Peripheral Interface.
 
 * JTAG = Joint Test Action Group.
 
