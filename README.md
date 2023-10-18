@@ -13,4 +13,4 @@
 
 #### Notice:
 
-* Currently focusing more on DNS2SSH or DNS Tunnels now since they cannot restrict the Tunnels inside / out of this scenario..
+* Currently focusing more on DNS2SSH or DNS Tunnels (SlowDNS) now since they cannot restrict the Tunnels inside / out of this scenario..
